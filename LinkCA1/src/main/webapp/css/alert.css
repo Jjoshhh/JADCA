@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+@keyframes showAlert {
+  0% {
+    transform: translateY(-50%) scale(0.6);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+#loginAlert:not(.hidden) {
+   animation: 0.5s linear showAlert;
+}

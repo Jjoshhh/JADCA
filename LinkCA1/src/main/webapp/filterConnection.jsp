@@ -15,9 +15,9 @@
 	<%
 	// database values
 	String jdbcDriver = "com.mysql.jdbc.Driver";
-	String dbURL = "jdbc:mysql://localhost:3306/jad_ca";
+	String dbURL = "jdbc:mysql://localhost/jad_ca";
 	String dbUsername = "root";
-	String dbPassword = "z9N3Eif7Y5";
+	String dbPassword = "GapingJaw@2005";
 
 	// initializing values
 	Connection connection = null;

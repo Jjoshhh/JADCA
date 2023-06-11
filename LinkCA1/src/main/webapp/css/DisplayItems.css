@@ -1,30 +1,41 @@
 @charset "UTF-8";
 
-html {
-    scroll-padding-top: 100px;
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    /* background: url("/src/wooden-table-with-blurred-background.jpg") no-repeat bottom center, linear-gradient(to top, #000 25%, transparent); */
-    background: #111827;
-    /* min-height: 100vh; */
-  }
-  
-  #navBar {
-    background-color: #121212;
-    height: 100px;
-  }
-  
-  #navBar.scrolled {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
-  }
-  
-  .Btn {
+body {
+	/* background: url("/src/wooden-table-with-blurred-background.jpg") no-repeat bottom center, linear-gradient(to top, #000 25%, transparent); */
+	background: #111827;
+	min-height: 100vh;
+	/* height: 9000px; */
+}
+
+#navBar {
+	transition: background-color 0.3s ease-in-out;
+	height: 100px;
+}
+
+#navBar.scrolled {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: #121212;
+	z-index: 1;
+}
+
+#front {
+	background-image: url(../img/layered-waves-haikei\ \(3\).svg);
+	background-size: cover;
+	background-position: bottom center;
+}
+
+#bookContainer {
+	cursor: pointer;
+}
+
+input[type=checkbox] {
+	accent-color: black;
+}
+
+.Btn {
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -67,12 +78,6 @@ html {
 	transition-duration: .3s;
 	box-shadow: 2px 2px 0px rgb(140, 32, 212);
 }
-
-#detailsGrid {
-	display: grid;
-	grid-template-columns: minmax(0,125px) 1fr;
-}  
-
 
 .input-number {
   width: 80px;
