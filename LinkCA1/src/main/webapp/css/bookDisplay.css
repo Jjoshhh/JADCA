@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+html {
+    scroll-padding-top: 100px;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    /* background: url("/src/wooden-table-with-blurred-background.jpg") no-repeat bottom center, linear-gradient(to top, #000 25%, transparent); */
+    background: #111827;
+    /* min-height: 100vh; */
+  }
+  
+  #navBar {
+    background-color: #121212;
+    height: 100px;
+  }
+  
+  #navBar.scrolled {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
