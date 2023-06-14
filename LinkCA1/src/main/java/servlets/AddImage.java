@@ -48,8 +48,6 @@ public class AddImage extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String isbn = request.getParameter("ISBN");
-
 		try {
 	        // Check if the request is a multi-part request
 	        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -79,7 +77,7 @@ public class AddImage extends HttpServlet {
 	                    PreparedStatement statement = conn.prepareStatement(sql);
 
 	                    // Set the ISBN parameter
-	                    statement.setString(2, "022206676-8");
+	                    statement.setString(2, isbn);
 
 	                    // Set the image parameter
 	                    if (imageStream != null) {
