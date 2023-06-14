@@ -49,7 +49,9 @@ public class BookSearch extends HttpServlet {
 			throws ServletException, IOException {
 		String searchQuery = request.getParameter("searchQuery");
 		String option = request.getParameter("option");
-		// Initialize SQL
+		if(searchQuery == null) {
+			searchQuery = "";
+		}
 
 		// initialize values
 		Connection connection = null;
@@ -86,7 +88,7 @@ public class BookSearch extends HttpServlet {
 				int quantity = resultSet.getInt("quantity");
 				String publisher = resultSet.getString("publisher");
 				String publication = resultSet.getString("publication");
-				String imageURL = resultSet.getString("image");
+				String imageURL = resultSet.getString("imageURL");
 
 				Book book = new Book(isbn, date, genre, description, title, author, price, quantity, publisher,
 						publication, imageURL); // Create a Book object

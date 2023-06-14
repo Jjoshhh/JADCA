@@ -97,16 +97,8 @@
 			<div class="grid grid-cols-4 gap-10 justify-items-center">
 
 				<%
-				// getting and storing image filepath
-				String imagePath = request.getParameter("imageURL");
-
 				// default image file path
 				String defaultImagePath = "./img/placeholder_img.webp";
-
-				// check if image is not found
-				if (imagePath == null || imagePath.isEmpty()) {
-					imagePath = defaultImagePath;
-				}
 
 				List<BookClass> bookList = (List<BookClass>) session.getAttribute("bookList");
 				System.out.print(bookList);
@@ -114,6 +106,7 @@
 				// check that arraylist is not empty
 				if (bookList != null && !bookList.isEmpty()) {
 					for (BookClass book : bookList) {
+						System.out.println(book.getISBN());
 				%>
 				<div class="w-full relative">
 					<form action="./bookDisplay.jsp" method="get">
@@ -122,14 +115,14 @@
 						</button>
 					</form>
 					<form class="w-full"
-						action="<%=request.getContextPath()%>/Books?title=<%=book.getTitle()%>"
+						action="<%=request.getContextPath()%>/Books?title=<%= book.getTitle()%>"
 						method="post">
 						<button type="submit" class="w-full">
 							<div
 								class="w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow bg-[#3D4D64] dark:border-gray-700"
 								id="bookContainer">
 								<div class="p-4 relative">
-									<img class="rounded-lg" src="<%=imagePath%>"
+									<img class="rounded-lg" src="DisplayImage?ISBN=<%=book.getISBN() %>"
 										alt="<%=defaultImagePath%>" />
 								</div>
 								<div class="px-5 pb-5">

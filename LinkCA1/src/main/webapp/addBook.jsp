@@ -65,7 +65,7 @@
 		<%
 		}
 		%>
-		<form action="<%=request.getContextPath()%>/NewBook" method="post"
+		<form action="<%=request.getContextPath()%>/AddBook" method="post"
 			enctype="multipart/form-data">
 			<!--Header-->
 			<div class="grid grid-cols-2">

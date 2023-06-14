@@ -1,9 +1,9 @@
 package servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -12,6 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.tika.Tika;
+
+import classes.DBUtility;
 
 /**
  * Servlet implementation class DisplayImage
@@ -34,31 +38,51 @@ public class DisplayImage extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String isbn = request.getParameter("ISBN");
+		String isbn = request.getParameter("isbn");
 
 		try {
 			// Establish the database connection
-			Class.forName("com.mysql.jdbc.Driver");
-			String jdbcUrl = "jdbc:mysql://localhost:3306/jadca?user=root&password=GapingJaw@2005&serverTimezone=UTC";
-			Connection conn = DriverManager.getConnection(jdbcUrl);
+			Connection conn = DBUtility.getConnection();
 
 			// Prepare the SQL statement to retrieve the image based on ISBN
-			String sql = "SELECT image FROM booklist WHERE ISBN=?";
+			String sql = "SELECT imageURL FROM booklist WHERE ISBN=?";
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, "022206676-8");
-
+			statement.setString(1, isbn);
+			System.out.println("------------------------" + isbn);
 			// Execute the SQL statement and retrieve the result set
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				// Retrieve the image data from the result set
-				byte[] imageData = resultSet.getBytes("image");
+				byte[] imageData = resultSet.getBytes("imageURL");
 
 				// Set the content type of the response
-				response.setContentType("image/jpeg"); // Adjust the content type based on your image type
+				// Create a Tika instance
+				Tika tika = new Tika();
+
+				// Detect the image type from the image data
+				String imageType = tika.detect(imageData);
+				System.out.println("------------------------\n "+ imageType);
+				// Set the content type based on the detected image type
+				response.setContentType(imageType);
 
 				// Write the image data to the response output stream
 				OutputStream outputStream = response.getOutputStream();
 				outputStream.write(imageData);
+				outputStream.flush();
+				outputStream.close();
+			} else {
+				// Load the default image data
+				InputStream inputStream = getServletContext().getResourceAsStream("/img/placeholder_img.webp");
+
+				response.setContentType("image/webp");
+
+				// Write the default image data to the response output stream
+				OutputStream outputStream = response.getOutputStream();
+				byte[] buffer = new byte[4096];
+				int bytesRead;
+				while ((bytesRead = inputStream.read(buffer)) != -1) {
+					outputStream.write(buffer, 0, bytesRead);
+				}
 				outputStream.flush();
 				outputStream.close();
 			}

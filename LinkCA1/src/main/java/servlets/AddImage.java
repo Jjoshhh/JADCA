@@ -77,7 +77,7 @@ public class AddImage extends HttpServlet {
 	                    PreparedStatement statement = conn.prepareStatement(sql);
 
 	                    // Set the ISBN parameter
-	                    statement.setString(2, isbn);
+	                    statement.setString(2, "022206676-8");
 
 	                    // Set the image parameter
 	                    if (imageStream != null) {
