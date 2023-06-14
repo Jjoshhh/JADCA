@@ -18,7 +18,7 @@
     try {
         // Establish the database connection
         Class.forName("com.mysql.jdbc.Driver");
-        String jdbcUrl = "jdbc:mysql://localhost:3306/jadca";
+        String jdbcUrl = "jdbc:mysql://localhost/jadca";
         String username = "root";
         String password = "GapingJaw@2005";
         conn = DriverManager.getConnection(jdbcUrl, username, password);
@@ -26,7 +26,7 @@
         // Prepare the SQL statement to retrieve the image
         String sql = "SELECT image FROM booklist WHERE title = ?";
         stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, 34); // Replace '1' with the actual record ID or parameter value
+        stmt.setInt(1, 34); 
 
         // Execute the query
         rs = stmt.executeQuery();

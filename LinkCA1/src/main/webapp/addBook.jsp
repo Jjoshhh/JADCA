@@ -65,7 +65,8 @@
 		<%
 		}
 		%>
-		<form action="<%=request.getContextPath()%>/AddBook" method="post">
+		<form action="<%=request.getContextPath()%>/AddBook" method="post"
+			enctype="multipart/form-data">
 			<!--Header-->
 			<div class="grid grid-cols-2">
 				<div>
@@ -80,12 +81,7 @@
 			<div class="grid  md:grid-cols-3">
 				<!-- Book Image -->
 				<div class="md:col-start-1 self-center">
-					<label for="imageURL" id="imageLabel">
-						<div class="preview-container text-center">
-							<img src="plus_icon.png" id="previewImage" class="preview-image">
-						</div>
-					</label> <input type="file" name="imageURL" id="imageURL" accept="image/*"
-						style="display: none;">
+					<input type="file" name="imageFile" id="imageFile">
 				</div>
 				<!--Book Details-->
 				<div class="md:col-start-2 col-span-2 ">
@@ -114,22 +110,24 @@
 								type="text" name="author" id="author" class="rounded text-2xl" />
 						</div>
 						<div class="flex flex-col">
-							<label class="text-xl text-white">Genre</label> <input
-								type="text" name="genre" id="genre" class="rounded text-2xl" />
-						</div>
-						<div class="flex flex-col">
-							<label class="text-xl text-white">Quantity</label> <input
-								type="number" name="quantity" id="quantity"
-								class="rounded text-2xl" />
-						</div>
-						<div class="flex flex-col">
-							<label class="text-xl text-white">Price</label> <input
-								type="number" name="price" id="price" class="rounded text-2xl" />
-						</div>
-						<div class="flex flex-col grow">
-							<label class="text-xl text-white">Description</label>
-							<textarea name="description" id="description" rows="4"
-								class="rounded text-2xl"></textarea>
+							<label class="text-xl text-white">Genre</label> <select
+								id="genre" name="genre" class="rounded text-2xl">
+								<option value="-1">Select Genre</option>
+							</select>
+							<div class="flex flex-col">
+								<label class="text-xl text-white">Quantity</label> <input
+									type="number" name="quantity" id="quantity"
+									class="rounded text-2xl" />
+							</div>
+							<div class="flex flex-col">
+								<label class="text-xl text-white">Price</label> <input
+									type="number" name="price" id="price" class="rounded text-2xl" />
+							</div>
+							<div class="flex flex-col grow">
+								<label class="text-xl text-white">Description</label>
+								<textarea name="description" id="description" rows="4"
+									class="rounded text-2xl"></textarea>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -137,37 +135,4 @@
 		</form>
 	</div>
 </body>
-<script>
-	const bookImgInput = document.getElementById("imageURL");
-	const previewImage = document.getElementById("previewImage");
-
-	bookImgInput.addEventListener("change", function(event) {
-		const file = event.target.files[0];
-		const reader = new FileReader();
-
-		reader.onload = function(e) {
-			previewImage.src = e.target.result;
-		};
-
-		reader.readAsDataURL(file);
-	});
-</script>
-<style>
-.preview-container {
-	width: 200px;
-	height: 300px;
-	position: relative;
-	overflow: hidden;
-}
-
-.preview-image {
-	width: 100%;
-	height: auto;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
-</style>
-
 </html>

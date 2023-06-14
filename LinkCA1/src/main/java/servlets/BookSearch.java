@@ -2,7 +2,6 @@ package servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import classes.Book;
+import classes.DBUtility;
 
 /**
  * Servlet implementation class BookSearch
@@ -50,10 +50,14 @@ public class BookSearch extends HttpServlet {
 		String searchQuery = request.getParameter("searchQuery");
 		String option = request.getParameter("option");
 		// Initialize SQL
+
+		// initialize values
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String connURL = "jdbc:mysql://localhost/jadca?user=root&password=GapingJaw@2005&serverTimezone=UTC";
-			Connection conn = DriverManager.getConnection(connURL);
+			connection = DBUtility.getConnection();
 			String sql = "";
 
 			// Assigning SQL statement based on option
@@ -63,10 +67,10 @@ public class BookSearch extends HttpServlet {
 				sql += "SELECT * FROM booklist WHERE title LIKE CONCAT('%', ?, '%')";
 			}
 
-			PreparedStatement statement = conn.prepareStatement(sql);
+			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, searchQuery);
 
-			ResultSet resultSet = statement.executeQuery();
+			resultSet = statement.executeQuery();
 			List<Book> bookList = new ArrayList<>(); // Assuming you have a Book class
 
 			while (resultSet.next()) {
@@ -94,7 +98,7 @@ public class BookSearch extends HttpServlet {
 			// Closing tags
 			resultSet.close();
 			statement.close();
-			conn.close();
+			connection.close();
 			// Forward the request to the JSP page
 			RequestDispatcher dispatcher = request.getRequestDispatcher("bookInv.jsp");
 			dispatcher.forward(request, response);

@@ -19,7 +19,7 @@ public class DBUtility {
 			// loading mysql driver
 			Class.forName(jdbcDriver);
 			connection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
-			System.out.print("alls good");
+			System.out.print("SQL Connected.");
 		}catch (ClassNotFoundException e) {
 			System.out.println("Error: MySQL JDBC driver not found.");
 			e.printStackTrace();
