@@ -79,13 +79,13 @@ public class CheckOut extends HttpServlet {
 		try {
 			// Getting connection from DBUtility
 			connection = DBUtility.getConnection();
-
+			System.out.println("Updating Qty and Checkout");
 			// Invoke methods
 			removeFromInventory(connection, cart_id);
 			int rowsAffected = deleteItems(connection, cart_id);
 			removeCookies(rowsAffected, cookies, response);		
 			
-			response.sendRedirect(request.getContextPath() + "/Home.jsp");
+			response.sendRedirect(request.getContextPath() + "/DisplayItems.jsp?success=true");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,14 +113,6 @@ public class CheckOut extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			// closing everything
-			if (resultSet != null) {
-				try {
-					resultSet.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 			if (preparedStatement != null) {
 				try {
 					connection.close();
@@ -148,6 +140,7 @@ public class CheckOut extends HttpServlet {
 			
 			// Execute statement
 			preparedStatement = connection.prepareStatement(getValueQuery);
+			System.out.println("CartID:" + cart_id);
 			preparedStatement.setString(1, cart_id);
 			
 			// Execute the query
@@ -164,7 +157,7 @@ public class CheckOut extends HttpServlet {
 				quantityList.add(getQuantity);
 				
 				for (String isbn : ISBNList) {
-					System.out.print(isbn);
+					System.out.println(isbn);
 				}
 				
 				for (int quantity : quantityList) {
@@ -172,13 +165,36 @@ public class CheckOut extends HttpServlet {
 				}
 			}
 			
-			// Getting the quantity from the database
+			// Loop through the list
+			String updateQuery = "UPDATE booklist SET quantity = quantity - ? WHERE ISBN = ?";
+			PreparedStatement preparedUpdateStatement = connection.prepareStatement(updateQuery);
+			for (int i = 0; i < ISBNList.size(); i++) {
+				preparedUpdateStatement.setInt(1, quantityList.get(i));
+				preparedUpdateStatement.setString(2, ISBNList.get(i));
+				preparedUpdateStatement.executeUpdate();
+			}
 			
+			System.out.println("Update List");
 			
 		}catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			// closing everything
+			if (resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
+	
+	/*
+	 * private int[] getPurchaseItems (Connection connection, String ) {
+	 * 
+	 * }
+	 */
 	
 	// Josh need to do this once cart_ID and customer_ID is up
 	private void updateOrderList () {
@@ -192,8 +208,9 @@ public class CheckOut extends HttpServlet {
 				for (Cookie cookie : cookies) {
 					if (cookie.getName().equals("cartItemsCookie")) {
 						// Force cookie to expire
+						cookie.setValue("");
 						cookie.setMaxAge(0);
-						// response.addCookie(cookie);
+						response.addCookie(cookie);
 						break;
 					}
 				}

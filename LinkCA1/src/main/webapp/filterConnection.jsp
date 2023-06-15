@@ -15,9 +15,9 @@
 	<%
 	// database values
 	String jdbcDriver = "com.mysql.jdbc.Driver";
-	String dbURL = "jdbc:mysql://localhost/jad_ca";
+	String dbURL = "jdbc:mysql://localhost:3306/jad_ca";
 	String dbUsername = "root";
-	String dbPassword = "GapingJaw@2005";
+	String dbPassword = "z9N3Eif7Y5";
 
 	// initializing values
 	Connection connection = null;
@@ -29,26 +29,34 @@
 	// Getting the query parameter from the URL
 	String getGenre = request.getParameter("genre");
 	String getSearch = request.getParameter("search");
+	String getPrice = request.getParameter("price");
 	System.out.println("The search is " + getSearch);
+	
+	// Getting customer ID from the URL
+	int customerID = 1;
 	
 	// loading jdbc driver
 	try {
+		// declare prepared statement
+		PreparedStatement preparedStatement = null;
+		
 		// loading jdbc driver
 		Class.forName(jdbcDriver);
 		connection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
-
-		// constructing the sql queries using StringBuilder
-		// construct the base query
-		StringBuilder newQuery = new StringBuilder("SELECT * FROM booklist WHERE 1=1");
-
-		// declare prepared statement
-		PreparedStatement preparedStatement = null;
 	
 		try {
+			// constructing the sql queries using StringBuilder
+			// construct the base query
+			StringBuilder newQuery = new StringBuilder("SELECT bl.*, bm.customer_id FROM booklist as bl LEFT JOIN bookmark as bm ON bl.ISBN = bm.ISBN WHERE (bm.customer_id = ? OR bm.customer_id IS null) AND bl.quantity > 0");
+			
+			if (getPrice != null && getPrice != "") {
+				newQuery.append(" AND bl.price <= ?");				
+			}
+			
 			String[] genreArray=null;
 			// if checkboxes are selected
 			if (getGenre != null && getGenre != "") {
-				newQuery.append(" AND genre IN");
+				newQuery.append(" AND bl.genre IN");
 				
 				genreArray = getGenre.split(",");
 				System.out.println(genreArray.toString());
@@ -69,20 +77,28 @@
 
 			// if books are searched for
 			if (getSearch != null && getSearch != "") {
-				newQuery.append(" AND title RLIKE ?");
+				newQuery.append(" AND bl.title RLIKE ?");
 			}
 
 			// prepare the statement
 			preparedStatement = connection.prepareStatement(newQuery.toString());
-
+			
+			preparedStatement.setInt(1, customerID);
+			
 			// Binding parameters
-			int parameterIndex = 1;
+			int parameterIndex = 2;
+			
+			if (getPrice != null && getPrice != "") {
+				double price = Double.parseDouble(getPrice);
+				preparedStatement.setDouble(parameterIndex, price);
+				parameterIndex ++;
+			}
 
 			if (genreArray != null && getGenre != "") {
 				// increment the index of the question 
 				// originally 1 and increases each time
 				for(int i=0;i<genreArray.length;i++){
-					preparedStatement.setString(i+1,genreArray[i]);
+					preparedStatement.setString(parameterIndex,genreArray[i]);
 					parameterIndex ++;
 				}
 			}
@@ -100,22 +116,32 @@
 
 			// processing and displaying of results
 		while (resultSet.next()) {
-		String imageURL = resultSet.getString("imageURL");
-		String title = resultSet.getString("title");
-		double price = resultSet.getDouble("price");
-
-		// creating a BookClass instance
-		BookClass bookclass = new BookClass(imageURL, title, price);
-
-		// adding booklist to the arraylist
-		bookList.add(bookclass);
-
+			String ISBN = resultSet.getString("ISBN");
+			String imageURL = resultSet.getString("imageURL");
+			String title = resultSet.getString("title");
+			double price = resultSet.getDouble("price");
+			Integer customer_id = (Integer)resultSet.getInt("customer_id");
+			
+			if (customer_id == null){
+				customer_id = 0;
+			}
+			
+			System.out.println(ISBN);
+	
+			// creating a BookClass instance
+			BookClass bookclass = new BookClass(imageURL, title, price, ISBN, customer_id);
+	
+			// adding booklist to the arraylist
+			bookList.add(bookclass);
+		
+		}
+			
+		
 		// Get the session object
 		HttpSession genreSession = request.getSession();
 
 		genreSession.setAttribute("bookList", bookList);
-		
-		}
+			
 		if (getSearch == null){
 			getSearch = "";
 		}
@@ -124,7 +150,11 @@
 			getGenre = "";
 		}
 		
-		response.sendRedirect("Home.jsp?search=" + getSearch + "&genre=" + getGenre);
+		if (getPrice == null){
+			getPrice = "";
+		}
+		
+		response.sendRedirect("Home.jsp?search=" + getSearch + "&genre=" + getGenre + "&price=" + getPrice);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

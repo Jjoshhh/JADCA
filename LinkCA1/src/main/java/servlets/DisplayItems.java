@@ -59,9 +59,17 @@ public class DisplayItems extends HttpServlet {
 
 					PrintWriter out = response.getWriter();
 					out.println(cookieValue);
+					break;
 				}
 			}
 
+			if (cookieValue == "" || cookieValue == null) {
+				// Error handling
+				
+				// Redirect back to the page
+				response.sendRedirect(request.getContextPath() + "/DisplayItems.jsp");
+			} else {
+			
 			// Splitting to get each individual cookie
 			String[] bookValues = cookieValue.split("#");
 
@@ -102,10 +110,13 @@ public class DisplayItems extends HttpServlet {
 
 					// Executing statement
 					preparedStatement = connection.prepareStatement(cartQuery);
+					System.out.println("Testing" + ISBN);
 					preparedStatement.setString(1, ISBN);
 
 					resultSet = preparedStatement.executeQuery();
-
+					
+					System.out.println("Test db connection");
+					
 					// getting the boolean result
 					while (resultSet.next()) {
 						String dbISBN = resultSet.getString("ISBN");
@@ -113,12 +124,15 @@ public class DisplayItems extends HttpServlet {
 						int dbQuantity = resultSet.getInt("quantity");
 						double dbPrice = resultSet.getDouble("price");
 						String dbImageURL = resultSet.getString("imageURL");
+						
+						System.out.println("The ISBN String is " + dbISBN);
 
 						// Create a new cart object
 						CartItems displayCartItems = new CartItems(dbImageURL, dbTitle, dbISBN, dbPrice, dbQuantity);
 
 						// Adding cart object to the list
 						ItemsList.add(displayCartItems);
+						System.out.println(ItemsList);
 					}
 					
 				} catch (SQLException e) {
@@ -150,6 +164,7 @@ public class DisplayItems extends HttpServlet {
 			
 			// Redirect back to the page
 			response.sendRedirect(request.getContextPath() + "/DisplayItems.jsp"); 
+			}
 		}
 	}
 

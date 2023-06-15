@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
 <%@ page import="java.util.List"%>
 <%@ page import="classes.BookClass"%>
@@ -23,13 +23,13 @@
 
 		<script>
 		if (!window.location.href.includes("?")){
-			return window.location.href = "./filterConnection.jsp";
+			window.location.href = "./filterConnection.jsp";
 		}
 		</script>
 
 		<%@include file="navBar.jsp"%>
 
- 		<div id="loginAlert" class="hidden">
+		<div id="loginAlert" class="hidden">
 			<%@ include file="alert.jsp"%>
 		</div>
 		<!-- search bar -->
@@ -58,11 +58,16 @@
 	<!-- side bar to filter options -->
 	<div class="flex min-h-screen" id="body">
 		<div class="bg-[#33363F] text-white w-1/5">
-			<ul class="flex flex-col w-full py-4 px-5 sticky top-[100px] z-40">
+			<ul class="flex flex-col w-full py-4 px-5 sticky top-[100px] z-40 gap-4">
 				<li>
 					<p class="font-bold text-2xl">Pricing</p>
 				</li>
 				<!-- add slider eventually -->
+				<div class="range-slider">
+  					<input class="range-slider__range" type="range" value="50" min="0" max="50" step="0.5">
+  					<span class="range-slider__value">0</span>
+				</div>
+				
 				<li>
 					<p class="font-bold text-2xl">Category</p>
 				</li>
@@ -79,9 +84,9 @@
 
 					<li class="flex items-center py-3"><input type="checkbox"
 						id="<%=genre%>" name="genre"
-						class="form-checkbox h-4 w-4 bg-black text-white transition duration-150 ease-in-out"
+						class="form-checkbox h-4 w-4 bg-black text-black transition duration-150 ease-in-out"
 						onclick="handleCheckboxClick()" value="<%=genre%>" /> <label
-						for="checkbox1" class="ml-2 pl-3 text-l font-semibold"><%=genre%></label></li>
+						for="<%=genre%>" class="ml-2 pl-3 text-l font-semibold"><%=genre%></label></li>
 
 					<%
 					}
@@ -97,8 +102,16 @@
 			<div class="grid grid-cols-4 gap-10 justify-items-center">
 
 				<%
+				// getting and storing image filepath
+				String imagePath = request.getParameter("imageURL");
+
 				// default image file path
 				String defaultImagePath = "./img/placeholder_img.webp";
+
+				// check if image is not found
+				if (imagePath == null || imagePath.isEmpty()) {
+					imagePath = defaultImagePath;
+				}
 
 				List<BookClass> bookList = (List<BookClass>) session.getAttribute("bookList");
 				System.out.print(bookList);
@@ -106,23 +119,41 @@
 				// check that arraylist is not empty
 				if (bookList != null && !bookList.isEmpty()) {
 					for (BookClass book : bookList) {
-						System.out.println(book.getISBN());
 				%>
 				<div class="w-full relative">
-					<form action="./bookDisplay.jsp" method="get">
+
+					<%
+					if (book.getCustomer_id() == 0) {
+					%>
+
+					<form action="<%=request.getContextPath()%>/Bookmark?status=unchecked&ISBN=<%=book.getISBN() %>" method="post">
 						<button type="submit">
-							<i  class="z-20 fa-regular fa-bookmark text-2xl absolute top-[45px] right-[20px] p-2"></i>
+							<i
+								class="z-20 fa-regular fa-bookmark text-2xl absolute top-[45px] right-[20px] p-2"></i>
 						</button>
 					</form>
+					<%
+					} else {
+					%>
+					<form action="<%=request.getContextPath()%>/Bookmark?status=checked&ISBN=<%=book.getISBN() %>" method="post">
+						<button type="submit">
+							<i
+								class="z-20 fa-solid fa-bookmark text-2xl absolute top-[45px] right-[20px] p-2"></i>
+						</button>
+					</form>
+					<%
+					}
+					%>
+
 					<form class="w-full"
-						action="<%=request.getContextPath()%>/Books?title=<%= book.getTitle()%>"
+						action="<%=request.getContextPath()%>/Books?title=<%=book.getTitle()%>"
 						method="post">
 						<button type="submit" class="w-full">
 							<div
 								class="w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow bg-[#3D4D64] dark:border-gray-700"
 								id="bookContainer">
 								<div class="p-4 relative">
-									<img class="rounded-lg" src="DisplayImage?ISBN=<%=book.getISBN() %>"
+									<img class="rounded-lg" src="<%=imagePath%>"
 										alt="<%=defaultImagePath%>" />
 								</div>
 								<div class="px-5 pb-5">
@@ -183,8 +214,10 @@
 				</div>
 				<%
 				}
-				}
+				} else {
 				%>
+					<h1 class="col-span-4 text-white text-4xl font-bold my-12">No Results!</h1>
+				<% } %>
 			</div>
 		</div>
 	</div>
@@ -198,6 +231,9 @@
 				navbar.classList.remove("scrolled");
 			}
 		};
+		
+		let navbar = document.querySelector("nav");
+		navbar.classList.remove("scrolled");
 		
 		// redirect to view specific book
 		function redirectBook(){
@@ -221,7 +257,10 @@
 			  combinedValues = combinedValues.slice(1);
 		  }
 		  
-		  return window.location.href = "./filterConnection.jsp?search=" + inputSearch + "&genre=" + combinedValues;
+		  let range = document.getElementsByClassName("range-slider__range")[0];
+		  let rangeInput = range.value;
+		  
+		  return window.location.href = "./filterConnection.jsp?search=" + inputSearch + "&genre=" + combinedValues + "&price=" + rangeInput;
 		}
 		
 		// handling search input submissions
@@ -275,6 +314,20 @@
 				} 
 			}
 			
+			if(queryString.has("price")) {
+				//  Get ElementByClassName returns an array so need to get first index
+				var range = document.getElementsByClassName("range-slider__range")[0];
+				var value = document.getElementsByClassName("range-slider__value")[0];
+				// Setting value of total range (2 values: query string value or 50)
+				// if first value is false use last value 
+				// if first value if true use first value
+				range.value = queryString.get("price") || 50;
+				value.innerText = range.value;
+				if (queryString.get("price") != "") {
+					document.getElementById("body").scrollIntoView({ behavior: "auto" })
+				}
+			}
+			
 			// alerting 
 			// breaks the checkbox cos errCode is not part of the query
 			if(queryString.has("errCode")){
@@ -286,6 +339,23 @@
 		}else{
 			window.location.href="./filterConnection.jsp"
 		}
+		
+		
+		
+		function rangeSlider() {
+			var sliders = document.getElementsByClassName("range-slider")[0];
+			var range = document.getElementsByClassName("range-slider__range")[0];
+			var value = document.getElementsByClassName("range-slider__value")[0];
+			
+			
+			value.innerText = range.value;
+			
+			range.addEventListener("input", () => {
+				value.innerText = range.value;
+				handleCheckboxClick();
+			})
+		}
+		rangeSlider()
 	</script>
 </body>
 
