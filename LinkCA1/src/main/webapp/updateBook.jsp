@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="java.util.*"%>
+	pageEncoding="ISO-8859-1" import="java.util.*, classes.Book"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,59 +13,14 @@
 </head>
 <body>
 	<!--Navigation Bar-->
-	<nav class="bg-black text-white flex px-16 items-center w-full mb-10"
-		id="navBar">
-		<div class="flex flex-nowrap justify-around w-full">
-			<a href="/home" class="flex items-center gap-3"> <img
-				class="w-16 rounded-full" src="./src/book_logo.jpg" alt="" />
-				<h4 class="font-bold text-xl text-white tracking-wide">SP
-					BookStore</h4>
-			</a>
-
-			<!--Nav main elements-->
-			<div class="flex flex-nowrap justify-evenly gap-16">
-				<!--Book Inventory Management-->
-				<a href="./bookInv.html"
-					class="font-medium px-3 py-2 rounded-lg hover:bg-neutral-700 w-[100px] text-center">
-					<i class="fa-solid fa-magnifying-glass text-white"></i>
-					<h4 class="text-white">Book Inventory</h4>
-				</a>
-				<!--Dashboard for sales-->
-				<a href="/cart"
-					class="font-medium px-3 py-2 rounded-lg hover:bg-neutral-700 w-[100px] text-center">
-					<i class="fa-solid fa-cart-shopping text-white"></i>
-					<h4 class="whitespace-normal w-20 text-center text-white">
-						Dashboard</h4>
-				</a>
-				<!--Logout-->
-				<a href="./" class="flex font-medium px-3 py-2">
-					<button class="Btn">
-						<div class="pr-16">Logout</div>
-						<svg class="svg text-4xl" xmlns="http://www.w3.org/2000/svg"
-							width="16" height="16" fill="currentColor"
-							class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
-                <path
-								d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5ZM9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8Zm1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5Zm-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96c.026-.163.04-.33.04-.5ZM7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
-              </svg>
-					</button>
-				</a>
-			</div>
-		</div>
-	</nav>
+	<jsp:include page="adminNavBar.jsp"></jsp:include>
 
 	<!--Main Body page-->
 	<div class="container mx-auto w-2/3 md:min-w-screen rounded-lg p-10">
 		<%
-		String status = request.getParameter("status");
-		if (status != null) {
+		Book BookU = (Book) request.getAttribute("updatingBook");
 		%>
-		<div class="transition ease-in-out delay-150">
-			<p><%=status%></p>
-		</div>
-		<%
-		}
-		%>
-		<form action="<%=request.getContextPath()%>/AddBook" method="post"
+		<form action="<%=request.getContextPath()%>/UpdateBook" method="post"
 			enctype="multipart/form-data">
 			<!--Header-->
 			<div class="grid grid-cols-2">
@@ -75,6 +30,7 @@
 				</div>
 				<div class="text-end">
 					<input type="submit" name="submit" id="submit"
+						class="rounded bg-white text-end " /> <input type="reset"
 						class="rounded bg-white text-end " />
 				</div>
 			</div>
@@ -89,25 +45,28 @@
 						<div class="flex flex-col">
 							<label class="text-xl sm:text-l text-white">Title</label> <input
 								type="text" name="title" id="title"
-								class="rounded text-2xl sm:w-1/3,text-l" />
+								class="rounded text-2xl sm:w-1/3,text-l"
+								value="<%=BookU.getTitle()%>" />
 						</div>
 						<div class="flex flex-col">
 							<label class="text-xl text-white">ISBN-Number</label> <input
-								type="number" name="ISBN" id="ISBN" class="rounded text-2xl" />
+								type="number" name="ISBN" id="ISBN" class="rounded text-2xl"
+								value="<%=BookU.getISBN()%>" />
 						</div>
 						<div class="flex flex-col">
 							<label class="text-xl text-white">Publication</label> <input
 								type="text" name="publication" id="publication"
-								class="rounded text-2xl" />
+								class="rounded text-2xl" value="<%=BookU.getPublication()%>" />
 						</div>
 						<div class="flex flex-col">
 							<label class="text-xl text-white">Publisher</label> <input
 								type="text" name="publisher" id="publisher"
-								class="rounded text-2xl" />
+								class="rounded text-2xl" value="<%=BookU.getPublisher()%>" />
 						</div>
 						<div class="flex flex-col">
 							<label class="text-xl text-white">Author</label> <input
-								type="text" name="author" id="author" class="rounded text-2xl" />
+								type="text" name="author" id="author" class="rounded text-2xl"
+								value="<%=BookU.getAuthor()%>" />
 						</div>
 						<div class="flex flex-col">
 							<label class="text-xl text-white">Genre</label> <select
@@ -121,7 +80,12 @@
 
 									// Generate the dropdown options based on the genre data
 									for (String genre : genres) {
-										out.println("<option value=\"" + genre + "\">" + genre + "</option>");
+										if (genre.equals(BookU.getGenre())) {
+									out.println("<option selected value=\"" + genre + "\">" + genre + "</option>");
+										} else {
+									out.println("<option value=\"" + genre + "\">" + genre + "</option>");
+										}
+
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -131,16 +95,17 @@
 							<div class="flex flex-col">
 								<label class="text-xl text-white">Quantity</label> <input
 									type="number" name="quantity" id="quantity"
-									class="rounded text-2xl" />
+									class="rounded text-2xl" value="<%=BookU.getQuantity()%>" />
 							</div>
 							<div class="flex flex-col">
 								<label class="text-xl text-white">Price</label> <input
-									type="number" name="price" id="price" class="rounded text-2xl" />
+									type="number" name="price" id="price" class="rounded text-2xl"
+									value="<%=BookU.getPrice()%>" />
 							</div>
 							<div class="flex flex-col grow">
 								<label class="text-xl text-white">Description</label>
 								<textarea name="description" id="description" rows="4"
-									class="rounded text-2xl"></textarea>
+									class="rounded text-2xl" value="<%=BookU.getDescription()%>"></textarea>
 							</div>
 						</div>
 					</div>

@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -38,8 +41,36 @@ public class AddBook extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+
+		try {
+			Connection conn = DBUtility.getConnection();
+
+			String sql = "SELECT DISTINCT genre FROM booklist";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet result = statement.executeQuery();
+
+			ArrayList<String> genre = new ArrayList<>();
+			while (result.next()) {
+				genre.add(result.getString("genre"));
+			}
+
+			for (String test : genre) {
+				System.out.println(test);
+			}
+
+			request.setAttribute("genres", genre);
+
+			if (request.getAttribute("updatingBook") != null) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("updateBook.jsp");
+				dispatcher.forward(request, response);
+			} else {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("addBook.jsp");
+				dispatcher.forward(request, response);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

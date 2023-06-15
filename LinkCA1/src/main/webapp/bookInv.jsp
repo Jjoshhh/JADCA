@@ -89,7 +89,7 @@
 			</div>
 
 			<div>
-				<a href="./addBook.jsp" class="text-blue-400 text-xl p-1">Add
+				<a href="AddBook" class="text-blue-400 text-xl p-1">Add
 					Book</a>
 			</div>
 
@@ -123,7 +123,7 @@
 						class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 						<%=book.getTitle()%></h5>
 					<!--Update Button-->
-					<a href="./updateBook.html"
+					<a href="UpdateBook?isbn=<%= book.getISBN() %>"
 						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 						Update <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1"
 							fill="currentColor" viewBox="0 0 20 20"

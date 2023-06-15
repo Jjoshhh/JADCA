@@ -48,43 +48,45 @@ public class DisplayImage extends HttpServlet {
 			String sql = "SELECT imageURL FROM booklist WHERE ISBN=?";
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setString(1, isbn);
-			System.out.println("------------------------" + isbn);
+
 			// Execute the SQL statement and retrieve the result set
 			ResultSet resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				// Retrieve the image data from the result set
 				byte[] imageData = resultSet.getBytes("imageURL");
 
-				// Set the content type of the response
-				// Create a Tika instance
-				Tika tika = new Tika();
+				if (imageData != null) {
+					// Set the content type of the response
+					// Create a Tika instance
+					Tika tika = new Tika();
 
-				// Detect the image type from the image data
-				String imageType = tika.detect(imageData);
-				System.out.println("------------------------\n "+ imageType);
-				// Set the content type based on the detected image type
-				response.setContentType(imageType);
+					// Detect the image type from the image data
+					String imageType = tika.detect(imageData);
 
-				// Write the image data to the response output stream
-				OutputStream outputStream = response.getOutputStream();
-				outputStream.write(imageData);
-				outputStream.flush();
-				outputStream.close();
-			} else {
-				// Load the default image data
-				InputStream inputStream = getServletContext().getResourceAsStream("/img/placeholder_img.webp");
+					// Set the content type based on the detected image type
+					response.setContentType(imageType);
 
-				response.setContentType("image/webp");
+					// Write the image data to the response output stream
+					OutputStream outputStream = response.getOutputStream();
+					outputStream.write(imageData);
+					outputStream.flush();
+					outputStream.close();
+				} else {
+					// Load the default image data
+					InputStream inputStream = getServletContext().getResourceAsStream("/img/placeholder_img.webp");
 
-				// Write the default image data to the response output stream
-				OutputStream outputStream = response.getOutputStream();
-				byte[] buffer = new byte[4096];
-				int bytesRead;
-				while ((bytesRead = inputStream.read(buffer)) != -1) {
-					outputStream.write(buffer, 0, bytesRead);
+					response.setContentType("image/webp");
+
+					// Write the default image data to the response output stream
+					OutputStream outputStream = response.getOutputStream();
+					byte[] buffer = new byte[4096];
+					int bytesRead;
+					while ((bytesRead = inputStream.read(buffer)) != -1) {
+						outputStream.write(buffer, 0, bytesRead);
+					}
+					outputStream.flush();
+					outputStream.close();
 				}
-				outputStream.flush();
-				outputStream.close();
 			}
 
 			// Close the resources

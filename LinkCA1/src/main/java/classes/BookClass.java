@@ -13,6 +13,7 @@ public class BookClass {
 	private String publication;
 	private String imageURL;
 	private int rating;
+	private int customer_id;
 
 	public BookClass(String ISBN, String date, String genre, String description, String title, String author,
 			double price, int quantity, String publisher, String publication, String imageURL, int rating) {
@@ -29,12 +30,29 @@ public class BookClass {
 		this.publication = publication;
 		this.imageURL = imageURL;
 		this.rating = rating;
+		this.customer_id = customer_id;
+	}
+	
+	public BookClass (String imageURL, String title, double price, String ISBN, int customer_id) {
+		this.imageURL = imageURL;
+		this.title = title;
+		this.price = price;
+		this.ISBN = ISBN;
+		this.customer_id = customer_id;
 	}
 	
 	public BookClass (String imageURL, String title, double price) {
 		this.imageURL = imageURL;
 		this.title = title;
 		this.price = price;
+	}
+
+	public int getCustomer_id() {
+		return customer_id;
+	}
+
+	public void setCustomer_id(int customer_id) {
+		this.customer_id = customer_id;
 	}
 
 	public String getISBN() {

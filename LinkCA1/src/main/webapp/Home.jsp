@@ -153,7 +153,7 @@
 								class="w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow bg-[#3D4D64] dark:border-gray-700"
 								id="bookContainer">
 								<div class="p-4 relative">
-									<img class="rounded-lg" src="<%=imagePath%>"
+									<img class="rounded-lg" src="DisplayImage?isbn=<%=book.getISBN()%>"
 										alt="<%=defaultImagePath%>" />
 								</div>
 								<div class="px-5 pb-5">

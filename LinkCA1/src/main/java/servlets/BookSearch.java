@@ -91,11 +91,11 @@ public class BookSearch extends HttpServlet {
 				String imageURL = resultSet.getString("imageURL");
 
 				Book book = new Book(isbn, date, genre, description, title, author, price, quantity, publisher,
-						publication, imageURL); // Create a Book object
-				bookList.add(book); // Add the Book object to the list
+						publication, imageURL); 
+				bookList.add(book); 
 			}
 
-			request.setAttribute("bookList", bookList); // Set the bookList as a request attribute
+			request.setAttribute("bookList", bookList); 
 
 			// Closing tags
 			resultSet.close();
