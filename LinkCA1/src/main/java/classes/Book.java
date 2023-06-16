@@ -12,11 +12,12 @@ public class Book {
 	private String publisher;
 	private String publication;
 	private String imageURL;
+	private String rating;
 
-	public Book(String ISBN, String date, String genre, String description, String title, String author,
-			double price, int quantity, String publisher, String publication, String imageURL) {
+	public Book(String iSBN, String date, String genre, String description, String title, String author, double price,
+			int quantity, String publisher, String publication, String imageURL, String rating) {
 		super();
-		this.ISBN = ISBN;
+		ISBN = iSBN;
 		this.date = date;
 		this.genre = genre;
 		this.description = description;
@@ -27,12 +28,7 @@ public class Book {
 		this.publisher = publisher;
 		this.publication = publication;
 		this.imageURL = imageURL;
-	}
-	
-	public Book (String imageURL, String title, double price) {
-		this.imageURL = imageURL;
-		this.title = title;
-		this.price = price;
+		this.rating = rating;
 	}
 
 	public String getISBN() {
@@ -40,7 +36,7 @@ public class Book {
 	}
 
 	public void setISBN(String iSBN) {
-		ISBN = ISBN;
+		ISBN = iSBN;
 	}
 
 	public String getDate() {
@@ -122,4 +118,13 @@ public class Book {
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
 	}
+
+	public String getRating() {
+		return rating;
+	}
+
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
+
 }

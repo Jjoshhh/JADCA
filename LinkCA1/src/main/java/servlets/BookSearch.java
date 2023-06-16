@@ -49,7 +49,7 @@ public class BookSearch extends HttpServlet {
 			throws ServletException, IOException {
 		String searchQuery = request.getParameter("searchQuery");
 		String option = request.getParameter("option");
-		if(searchQuery == null) {
+		if (searchQuery == null) {
 			searchQuery = "";
 		}
 
@@ -89,13 +89,14 @@ public class BookSearch extends HttpServlet {
 				String publisher = resultSet.getString("publisher");
 				String publication = resultSet.getString("publication");
 				String imageURL = resultSet.getString("imageURL");
+				String rating = resultSet.getString("rating");
 
 				Book book = new Book(isbn, date, genre, description, title, author, price, quantity, publisher,
-						publication, imageURL); 
-				bookList.add(book); 
+						publication, imageURL, rating);
+				bookList.add(book);
 			}
 
-			request.setAttribute("bookList", bookList); 
+			request.setAttribute("bookList", bookList);
 
 			// Closing tags
 			resultSet.close();

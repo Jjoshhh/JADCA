@@ -143,9 +143,11 @@ public class AddBook extends HttpServlet {
 			if (rowsInserted > 0) {
 				// Image inserted successfully
 				System.out.println("Success!");
+				response.sendRedirect("bookInv.jsp?addedBook=true");
 			} else {
 				// Failed to insert image
 				System.out.println("Failure!");
+				response.sendRedirect("bookInv.jsp?addedBook=false");
 			}
 
 			// Close the resources
@@ -156,7 +158,7 @@ public class AddBook extends HttpServlet {
 			conn.close();
 
 		} catch (SQLIntegrityConstraintViolationException e) {
-
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

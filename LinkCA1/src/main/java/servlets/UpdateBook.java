@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,9 +70,9 @@ public class UpdateBook extends HttpServlet {
 				String publisher = resultSet.getString("publisher");
 				String publication = resultSet.getString("publication");
 				String imageURL = resultSet.getString("imageURL");
-
+				String rating = resultSet.getString("rating");
 				book = new Book(isbn, date, genre, description, title, author, price, quantity, publisher, publication,
-						imageURL);
+						imageURL, rating);
 			}
 
 			request.setAttribute("updatingBook", book);
@@ -124,10 +123,15 @@ public class UpdateBook extends HttpServlet {
 		Part publicationPart = request.getPart("publication");
 		String publication = getStringFromPart(publicationPart);
 
-		Part imagePart = request.getPart("imageFile");
-		InputStream imageStream = imagePart.getInputStream();
-		// For testing later on
-		String testStream = getStringFromPart(imagePart);
+		Part ratingPart = request.getPart("rating");
+		String rating = getStringFromPart(ratingPart);
+
+		/*
+		 * Part imagePart = request.getPart("imageFile"); String testStream = null;
+		 * InputStream imageStream = null; if (imagePart != null) { // For testing later
+		 * on testStream = getStringFromPart(imagePart); }
+		 */
+		
 		
 		try {
 			// Initialize connection
@@ -196,13 +200,19 @@ public class UpdateBook extends HttpServlet {
 				parameters.add(publication);
 				updatesMade = true;
 			}
-			
-			if (!testStream.equals(book.getImageURL())) {
-				sql += "imageURL = ?, ";
-				parameters.add(imageStream);
+
+			if (!rating.equals(book.getRating())) {
+				sql += "rating = ?, ";
+				parameters.add(rating);
 				updatesMade = true;
 			}
 
+			/*
+			 * if (testStream != (null)) { sql += "imageURL = ?, "; imageStream =
+			 * imagePart.getInputStream(); parameters.add(imageStream); updatesMade = true;
+			 * }
+			 */
+			System.out.println("yo" + ISBN);
 			if (updatesMade) {
 				// Remove the trailing comma and space from the SQL statement
 				sql = sql.substring(0, sql.length() - 2);
@@ -225,23 +235,27 @@ public class UpdateBook extends HttpServlet {
 				System.out.println(rowsInserted);
 				if (rowsInserted > 0) {
 					System.out.println("Success!");
+					response.sendRedirect("bookInv.jsp?updatedBook=true");
 				} else {
 					System.out.println("Failure!");
+					response.sendRedirect("bookInv.jsp?updatedBook=false");
 				}
 
 				// Close the resources
-				if (imageStream != null) {
-					imageStream.close();
-				}
+				/*
+				 * if (imageStream != null) { imageStream.close(); }
+				 */
 				statement.close();
 				conn.close();
 			} else {
 
 			}
 
-		} catch (SQLIntegrityConstraintViolationException e) {
-
-		} catch (Exception e) {
+		} /*
+			 * catch (SQLIntegrityConstraintViolationException e) {
+			 * 
+			 * }
+			 */catch (Exception e) {
 			e.printStackTrace();
 		}
 

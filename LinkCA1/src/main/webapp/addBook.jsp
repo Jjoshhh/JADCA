@@ -17,7 +17,7 @@
 	%>
 	<!--Navigation Bar-->
 	<jsp:include page="adminNavBar.jsp"></jsp:include>
-	
+
 	<!--Main Body page-->
 	<div class="container mx-auto w-2/3 md:min-w-screen rounded-lg p-10">
 		<%
@@ -41,13 +41,16 @@
 				<div class="text-end">
 					<input type="reset"
 						class="rounded bg-white text-end text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" />
-					<input type="submit" name="submit" id="submit" />
+					<input type="submit" name="submit" id="submit"
+						class="rounded bg-white text-end text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" />
 				</div>
 			</div>
 			<div class="grid  md:grid-cols-3">
 				<!-- Book Image -->
-				<div class="md:col-start-1 self-center">
-					<input type="file" name="imageFile" id="imageFile">
+				<div class="self-center">
+					<img id="imagePreview" src="./img/placeholder_img.webp"
+						alt="Image Preview" class="w-3/4 p-5"> <input type="file"
+						name="imageFile" id="imageFile" onchange="previewImage(event)">
 				</div>
 				<!--Book Details-->
 				<div class="md:col-start-2 col-span-2 ">
@@ -106,20 +109,20 @@
 								}
 								%>
 							</select>
-							<div class="flex flex-col">
-								<label class="text-xl text-white">Quantity</label> <input
-									type="number" name="quantity" id="quantity"
-									class="rounded text-2xl" />
-							</div>
-							<div class="flex flex-col">
-								<label class="text-xl text-white">Price</label> <input
-									type="number" name="price" id="price" class="rounded text-2xl" />
-							</div>
-							<div class="flex flex-col grow">
-								<label class="text-xl text-white">Description</label>
-								<textarea name="description" id="description" rows="4"
-									class="rounded text-2xl"></textarea>
-							</div>
+						</div>
+						<div class="flex flex-col">
+							<label class="text-xl text-white">Quantity</label> <input
+								type="number" name="quantity" id="quantity"
+								class="rounded text-2xl" />
+						</div>
+						<div class="flex flex-col">
+							<label class="text-xl text-white">Price</label> <input
+								type="number" name="price" id="price" class="rounded text-2xl" />
+						</div>
+						<div class="flex flex-col">
+							<label class="text-xl text-white">Description</label>
+							<textarea name="description" id="description" rows="1"
+								maxlength="80" class="rounded text-2xl"></textarea>
 						</div>
 					</div>
 				</div>
@@ -135,8 +138,9 @@
 <script>
 	function checkRating() {
 		const ratingSelect = document.getElementById('rating');
+		const ratingValue = ratingSelect.value;
 
-		if (ratingSelect.value === '-1') {
+		if (ratingValue === '-1') {
 			ratingSelect.classList.add('border-red-500');
 		} else {
 			ratingSelect.classList.remove('border-red-500');
@@ -145,11 +149,47 @@
 
 	function checkGenre() {
 		const genreSelect = document.getElementById('genre');
+		const genreValue = genreSelect.value;
 
-		if (genreSelect.value === '-1') {
+		if (genreValue === '-1') {
 			genreSelect.classList.add('border-red-500');
 		} else {
 			genreSelect.classList.remove('border-red-500');
+		}
+	}
+	document.getElementById('submit').addEventListener('click',
+			function(event) {
+				const ratingSelect = document.getElementById('rating');
+				const genreSelect = document.getElementById('genre');
+				const ratingValue = ratingSelect.value;
+				const genreValue = genreSelect.value;
+
+				if (ratingValue === '-1') {
+					ratingSelect.classList.add('border-red-800');
+					event.preventDefault();
+				} else {
+					ratingSelect.classList.remove('border-red-800');
+				}
+
+				if (genreValue === '-1') {
+					genreSelect.classList.add('border-red-800');
+					event.preventDefault();
+				} else {
+					genreSelect.classList.remove('border-red-800');
+				}
+			});
+	function previewImage(event) {
+		const input = event.target;
+		const preview = document.getElementById('imagePreview');
+		if (input.files && input.files[0]) {
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				preview.setAttribute('src', e.target.result);
+				preview.style.display = 'block';
+			}
+			reader.readAsDataURL(input.files[0]);
+		} else {
+			preview.style.display = 'none';
 		}
 	}
 </script>
