@@ -43,7 +43,7 @@
 </style>
 </head>
 <body>
-	<form action="ReviewServlet" method="post">
+	<form action="<%=request.getContextPath() %>/AddReview" method="post">
 		<div class="rating">
 			<input type="radio" name="rating" id="star5" value="5" /><label
 				for="star5"></label> <input type="radio" name="rating" id="star4"
@@ -57,6 +57,11 @@
 		<textarea name="description" id="description" rows="4" cols="50"></textarea>
 		<br> <input type="submit" value="Submit Review">
 	</form>
+	
+	<!-- View all reviews -->
+	<div>
+		<% %>
+	</div>
 	<script>
 		$(document).ready(function() {
 			// Set the rating value when a star is clicked

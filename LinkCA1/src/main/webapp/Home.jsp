@@ -146,7 +146,7 @@
 					%>
 
 					<form class="w-full"
-						action="<%=request.getContextPath()%>/Books?title=<%=book.getTitle()%>"
+						action="<%=request.getContextPath()%>/Books?title=<%=book.getTitle()%>&isbn=<%=book.getISBN()%>"
 						method="post">
 						<button type="submit" class="w-full">
 							<div

@@ -54,7 +54,7 @@ public class AdminValidate extends HttpServlet {
 			connection = DBUtility.getConnection();
 
 			// creating the sql query to be executed
-			String adminQuery = "SELECT password FROM admin WHERE email = ?";
+			String adminQuery = "SELECT password, role_name FROM admin WHERE email = ?";
 
 			// creating prepared statement
 			statement = connection.prepareStatement(adminQuery);

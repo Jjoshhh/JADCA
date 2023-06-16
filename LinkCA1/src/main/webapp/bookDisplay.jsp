@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ page import="java.util.List"%>
-<%@ page import="classes.BookClass"%>
+<%@ page import="classes.*"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +15,7 @@
 <script src="https://kit.fontawesome.com/9c1a7a3896.js"
 	crossorigin="anonymous"></script>
 <link rel="stylesheet" href="./css/bookDisplay.css">
+<link rel="stylesheet" href="./css/review.css">
 <title>Document</title>
 </head>
 <body>
@@ -91,7 +92,7 @@
 					<div class="flex">
 						<div class="flex flex-col">
 							<img class="bg-white w-64 aspect-[3/4] ml-5 rounded-lg"
-								src="<%=book.getImageURL()%>" alt="./img/placeholder_img.webp" />
+								src="DisplayImage?isbn=<%=book.getISBN()%>" />
 							<div class="ml-5 mt-2">
 								ISBN Identification Number:
 								<p><%=book.getISBN()%></p>
@@ -162,15 +163,15 @@
 								</div>
 							</div>
 							<form class=""
-								action="<%=request.getContextPath()%>/BasketServlet?title=<%=book.getTitle()%>&price=<%=book.getPrice()%>&imageURL=<%=book.getImageURL()%>&quantity="
-								method="POST" id="addToBasket">
+								action="<%=request.getContextPath()%>/BasketServlet?title=<%=book.getTitle()%>&price=<%=book.getPrice()%>&quantity="
+								method="post" id="addToBasket">
 								<div class="flex items-center">
 									<div class="quantity">
 										<span class="input-number-decrement" id="minus-btn">–</span><input
 											class="input-number text-black" type="text" value="1" min="1"
 											max="<%=book.getQuantity()%>" id="quantity-input"
-											name="quantity" required/><span class="input-number-increment"
-											id="plus-btn">+</span>
+											name="quantity" required /><span
+											class="input-number-increment" id="plus-btn">+</span>
 									</div>
 									<div class="ml-3"><%=book.getQuantity()%>
 										Pieces Left
@@ -212,11 +213,97 @@
 						<%=book.getDescription()%>
 					</div>
 				</div>
+
+				<div>
+					<form
+						action="<%=request.getContextPath()%>/AddReview?isbn=<%=book.getISBN()%>"
+						method="post">
+						<div class="rating">
+							<input type="radio" name="rating" id="star5" value="5" /><label
+								for="star5"></label> <input type="radio" name="rating"
+								id="star4" value="4" /><label for="star4"></label> <input
+								type="radio" name="rating" id="star3" value="3" /><label
+								for="star3"></label> <input type="radio" name="rating"
+								id="star2" value="2" /><label for="star2"></label> <input
+								type="radio" name="rating" id="star1" value="1" /><label
+								for="star1"></label>
+						</div>
+						<br> <label for="description">Description:</label>
+						<textarea name="description" id="description" rows="4" cols="50"></textarea>
+						<br> <input type="submit" value="Submit Review">
+					</form>
+
+					<!-- View all reviews -->
+					<div>
+						<%
+						System.out.println("Testing");
+						ArrayList<Review> reviews = (ArrayList<Review>) request.getAttribute("Reviews");
+						if (reviews != null && reviews.size() > 0) {
+							for (Review R : reviews) {
+						%>
+
+						<figure class="max-w-screen-md">
+							<div class="flex items-center mb-5">
+								<%
+								int coloured = R.getRating();
+								int nonColoured = 5 - R.getRating();
+								for (int i = 0; i < coloured; i++) {
+								%>
+								<svg aria-hidden="true" class="w-5 h-5 text-yellow-400"
+									fill="currentColor" viewBox="0 0 20 20"
+									xmlns="http://www.w3.org/2000/svg">
+								<title>First star</title><path
+										d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+								<%
+								}
+								%>
+								<%
+								for (int i = 0; i < nonColoured; i++) {
+								%>
+								<svg aria-hidden="true"
+									class="w-5 h-5 text-gray-300 dark:text-gray-500"
+									fill="currentColor" viewBox="0 0 20 20"
+									xmlns="http://www.w3.org/2000/svg">
+									<title>Fifth star</title><path
+										d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+								<%
+								}
+								%>
+							</div>
+							<blockquote>
+								<p class="text-2xl font-semibold text-gray-900 dark:text-white">
+									"<%=R.getReview()%>"
+								</p>
+							</blockquote>
+							<figcaption class="flex items-center mt-6 space-x-3">
+								<img class="w-6 h-6 rounded-full"
+									src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+									alt="profile picture">
+								<div
+									class="flex items-center divide-x-2 divide-gray-300 dark:divide-gray-700">
+									<cite class="pr-3 font-medium text-gray-900 dark:text-white"><%=R.getCusName()%></cite>
+								</div>
+							</figcaption>
+						</figure>
+
+						<%
+						}
+						} else {
+						%>
+						<div>
+							<p>No Results.</p>
+						</div>
+						<%
+						}
+						%>
+					</div>
+				</div>
+
 			</div>
 			<div class="flex flex-col items-center border-l w-[30%] my-7 p-4">
 				<p class="pb-2">Bookmark</p>
 				<hr class="border w-full mx-2" />
-				
+
 				<%
 				// Getting session from Bookmark
 				List<BookClass> displayBookmark = (List<BookClass>) session.getAttribute("Bookmark");
@@ -224,8 +311,8 @@
 				if (displayBookmark != null && !displayBookmark.isEmpty()) {
 					for (BookClass bookmark : displayBookmark) {
 				%>
-				
-<%-- 				<form action="<%=request.getContextPath()%>/Books?title=<%=bookmark.getTitle() %>" class="flex bg-white w-5/6 aspect-[2/1] mt-5 rounded-lg" method="post">
+
+				<%-- 				<form action="<%=request.getContextPath()%>/Books?title=<%=bookmark.getTitle() %>" class="flex bg-white w-5/6 aspect-[2/1] mt-5 rounded-lg" method="post">
 					<button type="submit">
 						<img class="bg-[#33363F] w-24 aspect-[1/1.5] m-3 rounded-lg" src="" alt="">
 						<div class="my-3 mx-3">
@@ -236,17 +323,24 @@
 						</div>
 					</button>
 				</form> --%>
-				
-				<form action="<%=request.getContextPath()%>/Books?title=<%=bookmark.getTitle() %>" class="text-black bg-white w-full aspect-[2/1] mt-5 rounded-lg p-3" method="post">
-					<button class="w-full flex items-center justify-between gap-3" type="submit">
-						<img class="bg-[#33363F] w-24 aspect-[1/1.5] rounded-lg" style="min-width: 6rem" src="" alt="">
+
+				<form
+					action="<%=request.getContextPath()%>/Books?title=<%=bookmark.getTitle()%>"
+					class="text-black bg-white w-full aspect-[2/1] mt-5 rounded-lg p-3"
+					method="post">
+					<button class="w-full flex items-center justify-between gap-3"
+						type="submit">
+						<img class="bg-[#33363F] w-24 aspect-[1/1.5] rounded-lg"
+							style="min-width: 6rem" src="" alt="">
 						<div class="flex flex-col items-center justify-center w-full">
-							<p><%= bookmark.getTitle() %></p>
-							<p class="font-semibold">$ <%=bookmark.getPrice() %></p>
+							<p><%=bookmark.getTitle()%></p>
+							<p class="font-semibold">
+								$
+								<%=bookmark.getPrice()%></p>
 						</div>
 					</button>
 				</form>
-				
+
 
 				<%
 				}
@@ -271,7 +365,8 @@
 				
 				// constructing the URL
 				let URL = "<%=request.getContextPath()%>/BasketServlet?ISBN="
-										+ "<%=book.getISBN()%>"
+										+ "<%=book.getISBN()%>
+			"
 										+ "&Cart_id=null&quantity="
 										+ quantityValue;
 								// set value as form parameter
@@ -318,6 +413,14 @@
 		if (url.includes("?")) {
 			alert("Added to cart!")
 		}
+	</script>
+	<script>
+		$(document).ready(function() {
+			// Set the rating value when a star is clicked
+			$('.rating input[type="radio"]').click(function() {
+				$('input[name="rating"]').val($(this).val());
+			});
+		});
 	</script>
 </body>
 </html>

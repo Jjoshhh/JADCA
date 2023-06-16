@@ -53,7 +53,7 @@ public class Login extends HttpServlet {
 			// Initialize MySQL connection
 			Connection conn = DBUtility.getConnection();
 			
-			// Verifying username and password
+			// Verifying email and password
 			String sqlStr = "SELECT * FROM customer WHERE email=? AND password=?";
 			PreparedStatement pstmt = conn.prepareStatement(sqlStr);
 			pstmt.setString(1, email);
@@ -79,7 +79,7 @@ public class Login extends HttpServlet {
 
 				cart_id.setMaxAge(30 * 60);
 				response.addCookie(cart_id);
-				response.sendRedirect("Home.jsp");
+				response.sendRedirect("bookInv.jsp");
 			} else {
 				response.sendRedirect("login.jsp?errCode=invalidLogin");
 			}

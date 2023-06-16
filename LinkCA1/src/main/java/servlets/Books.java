@@ -1,10 +1,11 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,9 +38,6 @@ public class Books extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-
 		// initialize values
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -48,6 +46,8 @@ public class Books extends HttpServlet {
 
 		// getting query parameter from the URL
 		String getTitle = request.getParameter("title");
+		String isbn = request.getParameter("isbn");
+		
 		response.getWriter().append(getTitle);
 
 		// Getting arraylist returned from the method
@@ -61,7 +61,7 @@ public class Books extends HttpServlet {
 		session.setAttribute("Bookmark", displayBookmark);
 
 		// redirect to book display page
-		response.sendRedirect(request.getContextPath() + "/bookDisplay.jsp");
+		response.sendRedirect(request.getContextPath() + "/ViewReviews?isbn=" + isbn);
 	}
 
 	// Getting bookmark values from the database
