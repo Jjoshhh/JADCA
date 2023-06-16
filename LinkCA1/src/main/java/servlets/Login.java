@@ -2,16 +2,18 @@ package servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import classes.DBUtility;
 
 /**
  * Servlet implementation class Login
@@ -46,24 +48,37 @@ public class Login extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			String username = request.getParameter("username");
+			String email = request.getParameter("email");
 			String password = request.getParameter("password");
-			//Initialize MySQL connection
-			Class.forName("com.mysql.jdbc.Driver");
-			String connURL = "jdbc:mysql://localhost/jadca?user=root&password=GapingJaw@2005&serverTimezone=UTC";
-			Connection conn = DriverManager.getConnection(connURL);
-			Statement stmt = conn.createStatement();
+			// Initialize MySQL connection
+			Connection conn = DBUtility.getConnection();
 			
-			//Verifying username and password
-			String sqlStr = "SELECT * FROM customer WHERE username=? AND password=?";
+			// Verifying username and password
+			String sqlStr = "SELECT * FROM customer WHERE email=? AND password=?";
 			PreparedStatement pstmt = conn.prepareStatement(sqlStr);
-			pstmt.setString(1, username);
+			pstmt.setString(1, email);
 			pstmt.setString(2, password);
-			
+
 			ResultSet resultSet = pstmt.executeQuery();
 
-			if(resultSet.next()) {
-				response.sendRedirect("/dashboard.jsp");
+			if (resultSet.next()) {
+				String userRole = resultSet.getString("role_name");
+				String cus_id = resultSet.getString("customer_id");
+				
+				System.out.println(cus_id);
+				String cart = cus_id + RandGeneratedStr(10);
+				System.out.println(cart);
+
+				HttpSession session = request.getSession();
+				session.setAttribute("userRole", userRole);
+				// setting session to expiry in 30 mins
+				session.setMaxInactiveInterval(30 * 60);
+
+				Cookie cart_id = new Cookie("cart_id", cus_id);
+
+				cart_id.setMaxAge(30 * 60);
+				response.addCookie(cart_id);
+				response.sendRedirect("Home.jsp");
 			} else {
 				response.sendRedirect("login.jsp?errCode=invalidLogin");
 			}
@@ -72,5 +87,36 @@ public class Login extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// Method to generate random string
+	static String RandGeneratedStr(int l)
+
+	{
+
+		// a list of characters to choose from in form of a string
+
+		String AlphaNumericStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz0123456789";
+
+		// creating a StringBuffer size of AlphaNumericStr
+
+		StringBuilder s = new StringBuilder(l);
+
+		int i;
+
+		for (i = 0; i < l; i++) {
+
+			// generating a random number using math.random()
+
+			int ch = (int) (AlphaNumericStr.length() * Math.random());
+
+			// adding Random character one by one at the end of s
+
+			s.append(AlphaNumericStr.charAt(ch));
+
+		}
+
+		return s.toString();
+
 	}
 }

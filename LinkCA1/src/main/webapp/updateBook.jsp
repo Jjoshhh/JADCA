@@ -12,6 +12,9 @@
 <title>Document</title>
 </head>
 <body>
+	<%
+	if (session.getAttribute("userRole") != (null) && session.getAttribute("userRole").equals("admin")) {
+	%>
 	<!--Navigation Bar-->
 	<jsp:include page="adminNavBar.jsp"></jsp:include>
 
@@ -29,15 +32,16 @@
 						book!</h2>
 				</div>
 				<div class="text-end">
-					<input type="submit" name="submit" id="submit"
-						class="rounded bg-white text-end " /> <input type="reset"
-						class="rounded bg-white text-end " />
+					<input type="reset"
+						class="rounded bg-white text-end text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" />
+					<input type="submit" name="submit" id="submit" />
 				</div>
 			</div>
 			<div class="grid  md:grid-cols-3">
 				<!-- Book Image -->
 				<div class="md:col-start-1 self-center">
-					<input type="file" name="imageFile" id="imageFile">
+					<input type="file" name="imageFile" id="imageFile"
+						value=<%=BookU.getImageURL()%>>
 				</div>
 				<!--Book Details-->
 				<div class="md:col-start-2 col-span-2 ">
@@ -113,5 +117,10 @@
 			</div>
 		</form>
 	</div>
+	<%
+	} else {
+	response.sendRedirect("Home.jsp");
+	}
+	%>
 </body>
 </html>

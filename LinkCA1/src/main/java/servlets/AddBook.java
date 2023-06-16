@@ -54,10 +54,6 @@ public class AddBook extends HttpServlet {
 				genre.add(result.getString("genre"));
 			}
 
-			for (String test : genre) {
-				System.out.println(test);
-			}
-
 			request.setAttribute("genres", genre);
 
 			if (request.getAttribute("updatingBook") != null) {
@@ -106,13 +102,16 @@ public class AddBook extends HttpServlet {
 
 		Part publicationPart = request.getPart("publication");
 		String publication = getStringFromPart(publicationPart);
-
+		
+		Part ratingPart = request.getPart("rating");
+		String rating = getStringFromPart(ratingPart);
+		
 		try {
 			// Initialize connection
 			Connection conn = DBUtility.getConnection();
 
 			// SQL Statement
-			String sql = "INSERT INTO booklist (ISBN, genre, description, title, author, price, quantity, publisher, publication, imageURL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO booklist (ISBN, genre, description, title, author, price, quantity, publisher, publication, imageURL,rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			// Preparing parameters
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -127,8 +126,8 @@ public class AddBook extends HttpServlet {
 			statement.setInt(7, quantity);
 			statement.setString(8, publisher);
 			statement.setString(9, publication);
-
-			// To access outside for loop to close later on
+			statement.setString(11, rating);
+			
 			InputStream imageStream = null;
 
 			Part imagePart = request.getPart("imageFile");

@@ -131,7 +131,7 @@
 						<h4 class="text-white">Admin</h4>
 					</button>
 
-				</a> <a href="/Login" class="flex font-medium px-3 py-2">
+				</a> <a href="login.jsp" class="flex font-medium px-3 py-2">
 					<button class="Btn">
 						<div class="pr-16">Login</div>
 						<svg class="svg text-4xl" xmlns="http://www.w3.org/2000/svg"

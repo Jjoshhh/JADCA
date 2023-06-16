@@ -12,6 +12,9 @@
 <title>Document</title>
 </head>
 <body>
+	<%
+	if (session.getAttribute("userRole") != (null) && session.getAttribute("userRole").equals("admin")) {
+	%>
 	<!--Navigation Bar-->
 	<nav class="bg-black text-white flex px-16 items-center w-full mb-10"
 		id="navBar">
@@ -110,12 +113,24 @@
 								type="text" name="author" id="author" class="rounded text-2xl" />
 						</div>
 						<div class="flex flex-col">
+							<label class="text-xl text-white">Rating</label> <select
+								id="rating" name="rating" class="rounded text-2xl"
+								onchange="checkRating()">
+								<option value="-1">Select Rating</option>
+								<option value="G">G</option>
+								<option value="PG">PG</option>
+								<option value="PG-13">PG-13</option>
+								<option value="NC-16">NC-16</option>
+								<option value="R-21">R-21</option>
+							</select>
+						</div>
+						<div class="flex flex-col">
 							<label class="text-xl text-white">Genre</label> <select
-								id="genre" name="genre" class="rounded text-2xl">
+								id="genre" name="genre" class="rounded text-2xl"
+								onchange="checkGenre()">
 								<option value="-1">Select Genre</option>
 								<%
 								try {
-
 									// Get the genres from the servlet's request attribute
 									ArrayList<String> genres = (ArrayList<String>) request.getAttribute("genres");
 
@@ -148,5 +163,31 @@
 			</div>
 		</form>
 	</div>
+	<%
+	} else {
+	response.sendRedirect("Home.jsp");
+	}
+	%>
 </body>
+<script>
+	function checkRating() {
+		const ratingSelect = document.getElementById('rating');
+
+		if (ratingSelect.value === '-1') {
+			ratingSelect.classList.add('border-red-500');
+		} else {
+			ratingSelect.classList.remove('border-red-500');
+		}
+	}
+
+	function checkGenre() {
+		const genreSelect = document.getElementById('genre');
+
+		if (genreSelect.value === '-1') {
+			genreSelect.classList.add('border-red-500');
+		} else {
+			genreSelect.classList.remove('border-red-500');
+		}
+	}
+</script>
 </html>
