@@ -50,7 +50,7 @@
 						Dashboard</h4>
 				</a>
 				<!--Logout-->
-				<a href="<%=request.getContextPath() %>/AdminLogout" class="flex font-medium px-3 py-2">
+				<a href="<%=request.getContextPath() %>/Logout" class="flex font-medium px-3 py-2">
 					<button class="Btn">
 						<div class="pr-16">Logout</div>
 						<svg class="svg text-4xl" xmlns="http://www.w3.org/2000/svg"

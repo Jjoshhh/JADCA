@@ -53,7 +53,7 @@
 			</div>
 
 			<div>
-				<a href="AddBook" class="text-blue-400 text-xl p-1">Add Book</a>
+				<a href="<%=request.getContextPath() %>/AddBook" class="text-blue-400 text-xl p-1">Add Book</a>
 			</div>
 
 			<!--Scroll down button-->
