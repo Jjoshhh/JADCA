@@ -99,8 +99,7 @@ public class UpdateBook extends HttpServlet {
 		Part titlePart = request.getPart("title");
 		String title = getStringFromPart(titlePart);
 
-		Part ISBNPart = request.getPart("ISBN");
-		String ISBN = getStringFromPart(ISBNPart);
+		String ISBN = request.getParameter("isbn");
 
 		Part genrePart = request.getPart("genre");
 		String genre = getStringFromPart(genrePart);
@@ -126,13 +125,15 @@ public class UpdateBook extends HttpServlet {
 		Part ratingPart = request.getPart("rating");
 		String rating = getStringFromPart(ratingPart);
 
-		/*
-		 * Part imagePart = request.getPart("imageFile"); String testStream = null;
-		 * InputStream imageStream = null; if (imagePart != null) { // For testing later
-		 * on testStream = getStringFromPart(imagePart); }
-		 */
+		Part imagePart = request.getPart("imageFile");
+		String testStream = null;
+		InputStream imageStream = null;
 		
-		
+		if (imagePart != null) {
+			testStream = getStringFromPart(imagePart);
+			imageStream = imagePart.getInputStream();
+		}
+
 		try {
 			// Initialize connection
 			Connection conn = DBUtility.getConnection();
@@ -207,12 +208,12 @@ public class UpdateBook extends HttpServlet {
 				updatesMade = true;
 			}
 
-			/*
-			 * if (testStream != (null)) { sql += "imageURL = ?, "; imageStream =
-			 * imagePart.getInputStream(); parameters.add(imageStream); updatesMade = true;
-			 * }
-			 */
-			System.out.println("yo" + ISBN);
+			if (testStream != null) {
+				sql += "imageURL = ?, ";
+				parameters.add(imageStream);
+				updatesMade = true;
+			}
+
 			if (updatesMade) {
 				// Remove the trailing comma and space from the SQL statement
 				sql = sql.substring(0, sql.length() - 2);
@@ -242,9 +243,10 @@ public class UpdateBook extends HttpServlet {
 				}
 
 				// Close the resources
-				/*
-				 * if (imageStream != null) { imageStream.close(); }
-				 */
+				if (imageStream != null) {
+					imageStream.close();
+				}
+
 				statement.close();
 				conn.close();
 			} else {

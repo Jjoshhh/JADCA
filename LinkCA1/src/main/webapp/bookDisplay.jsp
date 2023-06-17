@@ -87,7 +87,7 @@
 				for (BookClass book : displayBookList) {
 			%>
 
-			<div class="flex w-full text-white">
+			<div class="flex w-full text-white" id="BookDetail">
 				<div class="flex flex-col mt-6 w-full">
 					<div class="flex">
 						<div class="flex flex-col">
@@ -237,7 +237,7 @@
 					<div>
 						<%
 						System.out.println("Testing");
-						ArrayList<Review> reviews = (ArrayList<Review>) request.getAttribute("Reviews");
+						ArrayList<Review> reviews = (ArrayList<Review>) session.getAttribute("Reviews");
 						if (reviews != null && reviews.size() > 0) {
 							for (Review R : reviews) {
 						%>

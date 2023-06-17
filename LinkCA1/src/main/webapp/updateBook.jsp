@@ -23,14 +23,14 @@
 		<%
 		Book BookU = (Book) request.getAttribute("updatingBook");
 		%>
-		<form action="<%=request.getContextPath()%>/UpdateBook" method="post"
+		<form action="<%=request.getContextPath()%>/UpdateBook?isbn=<%=BookU.getISBN() %>" method="post"
 			enctype="multipart/form-data">
 
 			<!--Header-->
 			<div class="grid grid-cols-2">
 				<div>
-					<h2 class="text-4xl md:text-3xl,text-bold  text-white ">Update the
-						book!</h2>
+					<h2 class="text-4xl md:text-3xl,text-bold  text-white ">Update
+						the book!</h2>
 				</div>
 				<div class="text-end">
 					<input type="reset"
@@ -62,7 +62,7 @@
 
 						<div class="flex flex-col">
 							<label class="text-xl text-white">ISBN-Number</label> <input
-								type="number" name="ISBN" id="ISBN" class="rounded text-2xl"
+								type="text" name="ISBN" id="ISBN" class="rounded text-2xl"
 								value="<%=BookU.getISBN()%>" disabled />
 						</div>
 
@@ -93,8 +93,8 @@
 								id="rating" name="rating" class="rounded text-2xl"
 								onchange="checkRating()">
 								<option value="-1">Select Rating</option>
-
-								<option value="G"
+								<option value="2">Test</option>
+								<%-- <option value="G"
 									<%if (BookU.getRating().equals("G")) {
 	out.print("selected");
 }%>>G</option>
@@ -113,7 +113,7 @@
 								<option value="R-21"
 									<%if (BookU.getRating().equals("R-21")) {
 	out.print("selected");
-}%>>R-21</option>
+}%>>R-21</option> --%>
 							</select>
 						</div>
 

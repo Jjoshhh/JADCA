@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import classes.BookClass;
 import classes.DBUtility;
+import classes.Review;
 
 /**
  * Servlet implementation class Books
@@ -47,21 +48,25 @@ public class Books extends HttpServlet {
 		// getting query parameter from the URL
 		String getTitle = request.getParameter("title");
 		String isbn = request.getParameter("isbn");
-		
+
 		response.getWriter().append(getTitle);
 
 		// Getting arraylist returned from the method
 		ArrayList<BookClass> displayBookList = getBookValues(connection, getTitle);
 		// Getting bookmarks from the method
 		ArrayList<BookClass> displayBookmark = getBookmark(connection, customer_id);
+		
+		ArrayList<Review> reviews = getReviews(isbn);
 
 		// Setting session from request
 		HttpSession session = request.getSession();
 		session.setAttribute("bookDetails", displayBookList);
 		session.setAttribute("Bookmark", displayBookmark);
+		
+		session.setAttribute("Reviews", reviews);
 
 		// redirect to book display page
-		response.sendRedirect(request.getContextPath() + "/ViewReviews?isbn=" + isbn);
+		response.sendRedirect(request.getContextPath() + "/bookDisplay.jsp");
 	}
 
 	// Getting bookmark values from the database
@@ -171,6 +176,39 @@ public class Books extends HttpServlet {
 			e.printStackTrace();
 		}
 		return displayBookList;
+	}
+
+	private ArrayList<Review> getReviews(String isbn) {
+		ArrayList<Review> reviews = new ArrayList<Review>();
+		try {
+			Connection conn = DBUtility.getConnection();
+			String sql = "SELECT r.*, c.*,avg(rating) AS finalRating FROM review r INNER JOIN customer c ON r.customer_id = c.customer_id WHERE ISBN=?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, isbn);
+			ResultSet result = stmt.executeQuery();
+
+			while (result.next()) {
+				String cus_id = result.getString("customer_id");
+				int rating = result.getInt("finalRating");
+				String reviewText = result.getString("review");
+				String fName = result.getString("first_name");
+				String lName = result.getString("last_name");
+				String cusName = fName + " " + lName;
+				Review review = new Review(cus_id, reviewText, rating, cusName);
+				reviews.add(review);
+			}
+
+			System.out.println(reviews);
+			for(Review r: reviews) {
+				System.out.println(r.getCusName());
+				System.out.println(r.getReview());
+			}
+			System.out.println("i am about to leave the servlet");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return reviews;
 	}
 
 	/**

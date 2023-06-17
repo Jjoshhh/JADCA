@@ -40,7 +40,7 @@ public class AddReview extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String isbn = request.getParameter("isbn");
-		String review = request.getParameter("review");
+		String review = request.getParameter("description");
 		int rating = Integer.parseInt(request.getParameter("rating"));
 		
 		HttpSession session = request.getSession(false);
