@@ -67,7 +67,7 @@ public class DisplayItems extends HttpServlet {
 				// Error handling
 				
 				// Redirect back to the page
-				response.sendRedirect(request.getContextPath() + "/DisplayItems.jsp");
+				response.sendRedirect(request.getContextPath() + "/DisplayItems.jsp?clearCart=true");
 			} else {
 			
 			// Splitting to get each individual cookie
@@ -134,6 +134,7 @@ public class DisplayItems extends HttpServlet {
 						ItemsList.add(displayCartItems);
 						System.out.println(ItemsList);
 					}
+					System.out.println("I am querying for the items again!" + ItemsList);
 					
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -157,7 +158,7 @@ public class DisplayItems extends HttpServlet {
 			}
 			
 			
-			HttpSession session = request.getSession();
+			HttpSession session = request.getSession(true);
 			session.setAttribute("ItemsToCheckout", ItemsList);
 			PrintWriter out1 = response.getWriter();
 			out1.println(session);

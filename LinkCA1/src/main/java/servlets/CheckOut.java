@@ -1,21 +1,20 @@
 package servlets;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import classes.DBUtility;
-
-import javax.servlet.http.Cookie;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import classes.DBUtility;
 
 /**
  * Servlet implementation class CheckOut
@@ -56,7 +55,7 @@ public class CheckOut extends HttpServlet {
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				if (cookie.getName().equals("cartItemsCookie")) {
-					cookieValue = cookie.getValue();
+					cookieValue = (String) cookie.getValue();
 					break;
 				}
 			}
@@ -85,7 +84,7 @@ public class CheckOut extends HttpServlet {
 			int rowsAffected = deleteItems(connection, cart_id);
 			removeCookies(rowsAffected, cookies, response);		
 			
-			response.sendRedirect(request.getContextPath() + "/DisplayItems.jsp?success=true");
+			response.sendRedirect(request.getContextPath() + "/Home.jsp?success=true");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -109,7 +108,10 @@ public class CheckOut extends HttpServlet {
 			
 			// Execute query string
 			rowsAffected = preparedStatement.executeUpdate();
+			
 			System.out.println("Rows affected: " + rowsAffected);
+			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

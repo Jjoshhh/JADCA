@@ -26,12 +26,16 @@
 			window.location.href = "./filterConnection.jsp";
 		}
 		</script>
-
+	
+		<!-- Navigation Bar -->
 		<%@include file="navBar.jsp"%>
-
+		
+		<!-- Alert for Invalid Login -->
 		<div id="loginAlert" class="hidden">
 			<%@ include file="alert.jsp"%>
 		</div>
+		
+		
 		<!-- search bar -->
 		<form action="HomePageConnection.jsp" method="get">
 			<div

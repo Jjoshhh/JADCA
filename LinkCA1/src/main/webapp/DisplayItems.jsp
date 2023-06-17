@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -16,11 +17,16 @@
 </head>
 
 <body>
+
+	<%
+	final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+	double totalPrice = 0;
+	%>
 	<div class="bg-[dark]">
 		<%@include file="navBar.jsp"%>
 	</div>
 
-	<div class="flex justify-center mt-16">
+	<div class="flex justify-center mt-[164px]">
 		<div class="bg-white w-3/4 aspect-[2.5/1] rounded-xl">
 			<div class="mx-10">
 				<div class="text-3xl font-bold mt-3 mb-4" id="title">Items
@@ -30,22 +36,25 @@
 					id="cart-contents">
 
 					<%
-					// getting the session details
-					List<CartItems> displayCartList = (List<CartItems>) session.getAttribute("ItemsToCheckout");
+					if (!(request.getParameter("clearCart") != null)) {
 
-					// Initializing variables
-					String dbISBN = null;
-					String dbTitle = null;
-					int dbQuantity = 0;
-					double dbPrice = 0;
-					String dbImageURL = null;
-					double totalPrice = 0;
+						if (session.getAttribute("ItemsToCheckout") != null && session.getAttribute("ItemsToCheckout") != "") {
 
-					DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+							// getting the session details
+							List<CartItems> displayCartList = (List<CartItems>) session.getAttribute("ItemsToCheckout");
 
-					// If arraylist has contents
-					// loop through everything and display
-					if (displayCartList != null && !displayCartList.isEmpty()) {
+							// Initializing variables
+							String dbISBN = null;
+							String dbTitle = null;
+							int dbQuantity = 0;
+							double dbPrice = 0;
+							String dbImageURL = null;
+
+							// If arraylist has contents
+							// loop through everything and display
+							System.out.println(displayCartList != null);
+							System.out.println(!displayCartList.isEmpty());
+							if (displayCartList != null && !displayCartList.isEmpty()) {
 						for (CartItems item : displayCartList) {
 							dbISBN = item.getISBN();
 							dbTitle = item.getTitle();
@@ -59,10 +68,10 @@
 					%>
 
 					<div
-						class="flex space-x-28 bg-[black] w-full aspect-[7/1] my-5 rounded-xl items-center text-white font-semibold text-xl">
+						class="grid displayGrid bg-[black] w-full aspect-[7/1] my-5 rounded-xl items-center text-white font-semibold text-xl">
 						<img class="bg-[#D9D9D9] m-3 w-24 aspect-[1/1.5] rounded-xl"
 							src="" alt="" />
-						<div class="flex flex-col">
+						<div class="flex flex-col w-full">
 							<div class="" id="title"><%=dbTitle%></div>
 							<div class="py-2" id="ISBN"><%=dbISBN%></div>
 						</div>
@@ -71,7 +80,7 @@
 						<div><%=dbQuantity%>
 							Pieces
 						</div>
-						<form class="ml-auto"
+						<form class="p-4"
 							action="<%=request.getContextPath()%>/RemoveBook?ISBN=<%=dbISBN%>"
 							method="post">
 							<button type="submit">
@@ -83,8 +92,23 @@
 					<%
 					}
 					}
+					}
+					} else if(request.getParameter("clearCart").equals("true")) {
 					%>
+					<div class="self-center text-4xl font-bold">No Items In Cart!</div>
+
+					<style>
+#cart-contents {
+	justify-content: center;
+	``
+}
+</style>
 				</div>
+				<%
+				}
+				%>
+
+
 				<hr class="border-2 h-px bg-gray-200 border-0 dark:bg-gray-700">
 				<div class="flex text-3xl font-bold my-3 justify-between">
 					<div class="justify-start">Total Cost:</div>
@@ -107,32 +131,13 @@
 			</div>
 		</div>
 	</div>
-
+	<!-- 
 	<script>
-		// Get the quantity elements
-		const minusBtn = document.querySelector("#minus-btn");
-		const quantityInput = document.querySelector("#quantity-input");
-		const plusBtn = document.querySelector("#plus-btn");
-
-		// Adding event listeners for plus and minus buttons
-		// involking functions based on the input
-		minusBtn.addEventListener('click', decreaseCount);
-		plusBtn.addEventListener('click', increaseCount);
-
-		function decreaseCount() {
-			let currentQuantity = parseInt(quantityInput.value);
-			if (currentQuantity > 1) {
-				currentQuantity--;
-				quantityInput.value = currentQuantity;
-			}
-		}
-
-		function increaseCount() {
-			// remember to conduct a check for if added quantity is above total quantity
-			let currentQuantity = parseInt(quantityInput.value);
-			currentQuantity++;
-			quantityInput.value = currentQuantity;
+		if (window.location.href.includes("?")) {
+			alert("Transaction Approved!");
+			window.location.href = "./Home.jsp";
 		}
 	</script>
+ -->
 </body>
 </html>

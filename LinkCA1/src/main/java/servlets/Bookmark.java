@@ -83,15 +83,9 @@ public class Bookmark extends HttpServlet {
 			preparedStatement = connection.prepareStatement(toggleQuery);
 			preparedStatement.setString(1, ISBN);
 			preparedStatement.setInt(2, customer_id);
-			
-			System.out.println(preparedStatement);
 
 			// Execute query string
 			preparedStatement.executeUpdate();
-			// preparedStatement.execute();
-	 
-			// System.out.println("Rows affected: " + rowsAffected);
-			System.out.println("Hello");
 
 		} catch (SQLException e) {
 			e.printStackTrace();

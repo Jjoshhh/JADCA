@@ -48,10 +48,9 @@ public class Logout extends HttpServlet {
 			Cookie[] getCookie = request.getCookies();
 
 			for (Cookie getCookies : getCookie) {
-				if (getCookies.getName().equals("cart_id")) {
+				if (getCookies.getName().equals("cart_id") || getCookies.getName().equals("cartItemsCookie")) {
 					getCookies.setMaxAge(0);
 					response.addCookie(getCookies);
-					break;
 				}
 			}
 		}

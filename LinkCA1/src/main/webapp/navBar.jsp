@@ -137,7 +137,7 @@
 				</a>
 
 				<%
-				// Gettign cookies
+				// Getting cookies
 				Cookie[] customerCookie = request.getCookies();
 				boolean loggedIn = false;
 
