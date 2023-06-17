@@ -29,7 +29,8 @@
 </style>
 </head>
 <body>
-	<nav class="text-white flex px-16 items-center w-full scrolled" id="navBar">
+	<nav class="text-white flex px-16 items-center w-full scrolled"
+		id="navBar">
 		<div class="flex flex-nowrap justify-around w-full">
 			<a href="./Home.jsp" class="flex items-center gap-3"> <img
 				class="w-16 rounded-full" src="./img/book_logo.jpg" alt="">
@@ -93,7 +94,7 @@
 								<!-- <div class="w-[50px] aspect-[3/4] bg-gray-700 rounded-md"></div> -->
 								<img
 									class="min-w-[50px] w-[50px] aspect-[3/4] bg-gray-700 rounded-md"
-									src="<%=cartItem.getImageURL()%>" alt="" />
+									src="DisplayImage?isbn=<%=cartItem.getISBN() %>" alt="" />
 								<div class="flex flex-col w-[175px]">
 									<div class="truncate"><%=cartItem.getTitle()%></div>
 									<div><%=cartItem.getPrice()%></div>
@@ -107,7 +108,8 @@
 							// no product
 							%>
 							<div class="flex items-center justify-between gap-3">
-								<img class="min-w-[50px]" src="./img/no_items_img.webp" alt="no-items" />
+								<img class="min-w-[50px]" src="./img/no_items_img.webp"
+									alt="no-items" />
 							</div>
 							<%
 							}
@@ -115,10 +117,12 @@
 							%>
 						</div>
 						<!-- <hr class="bg-[black] my-3 px-3"> -->
-						<form action="<%=request.getContextPath()%>/DisplayItems" method="POST">
-							<button class="flex text-white bg-[#050708] hover:bg-[#050708]/80 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex gap-1 items-center dark:hover:bg-[#050708]/40 dark:focus:ring-gray-600 justify-center w-full" type="submit">
-								Check out
-							<i class="fa-solid fa-cart-shopping text-white"></i>
+						<form action="<%=request.getContextPath()%>/DisplayItems"
+							method="POST">
+							<button
+								class="flex text-white bg-[#050708] hover:bg-[#050708]/80 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex gap-1 items-center dark:hover:bg-[#050708]/40 dark:focus:ring-gray-600 justify-center w-full"
+								type="submit">
+								Check out <i class="fa-solid fa-cart-shopping text-white"></i>
 							</button>
 						</form>
 					</div>
@@ -130,18 +134,62 @@
 						<i class="fa-solid fa-user text-white"></i>
 						<h4 class="text-white">Admin</h4>
 					</button>
-
-				</a> <a href="login.jsp" class="flex font-medium px-3 py-2">
-					<button class="Btn">
-						<div class="pr-16">Login</div>
-						<svg class="svg text-4xl" xmlns="http://www.w3.org/2000/svg"
-							width="16" height="16" fill="currentColor"
-							class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
-                                <path
-								d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5ZM9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8Zm1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5Zm-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96c.026-.163.04-.33.04-.5ZM7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
-                              </svg>
-					</button>
 				</a>
+
+				<%
+				// Gettign cookies
+				Cookie[] customerCookie = request.getCookies();
+				boolean loggedIn = false;
+
+				for (Cookie perCookie : customerCookie) {
+					if (perCookie.getName().equals("cart_id")) {
+						loggedIn = true;
+						break;
+					}
+				}
+				
+				boolean cusExist = loggedIn;
+				
+				if (loggedIn) {
+				%>
+
+				<div class="flex font-medium text-sm px-3 py-2">
+					<form class="flex font-medium px-3 py-2"
+						action="<%=request.getContextPath()%>/Logout" method="post">
+						<button class="Btn">
+							<div class="pr-16">Logout</div>
+							<svg class="svg text-4xl" xmlns="http://www.w3.org/2000/svg"
+								width="16" height="16" fill="currentColor"
+								class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
+                                <path
+									d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5ZM9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8Zm1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5Zm-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96c.026-.163.04-.33.04-.5ZM7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
+                              </svg>
+						</button>
+					</form>
+				</div>
+
+				<%
+				} else {
+				%>
+
+				<div class="flex font-medium px-3 py-2">
+					<form class="flex font-medium text-sm px-3 py-2"
+						action="<%=request.getContextPath()%>/Login" method="post">
+						<button class="Btn">
+							<div class="pr-16">Login</div>
+							<svg class="svg text-4xl" xmlns="http://www.w3.org/2000/svg"
+								width="16" height="16" fill="currentColor"
+								class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
+                                <path
+									d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5ZM9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8Zm1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5Zm-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96c.026-.163.04-.33.04-.5ZM7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
+                              </svg>
+						</button>
+					</form>
+				</div>
+
+				<%
+				}
+				%>
 			</div>
 		</div>
 	</nav>

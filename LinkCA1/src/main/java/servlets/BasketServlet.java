@@ -1,12 +1,11 @@
+
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -45,9 +44,15 @@ public class BasketServlet extends HttpServlet {
 
 		// Getting the input for the URL query parameter
 		String ISBN = request.getParameter("ISBN");
-		/* String Cart_id = request.getParameter("Cart_id"); */
-		String Cart_id = "12";
+		String Cart_id = null;
 		int quantity = Integer.parseInt(request.getParameter("quantity"));
+		
+		Cookie[] cookies = request.getCookies();
+		for (Cookie c: cookies) {
+			if(c.getName().equals("cart_id")) {
+				Cart_id = (String) c.getValue();
+			}
+		}
 
 		// initialize values
 		Connection connection = null;
@@ -206,11 +211,12 @@ public class BasketServlet extends HttpServlet {
 			StringBuilder sb = new StringBuilder();
 			for (CartItems cartItem : cartItemsList) {
 				sb.append(cartItem.getISBN()).append("|").append(cartItem.getCart_id()).append("|")
-						.append(cartItem.getTitle()).append("|").append(cartItem.getImageURL()).append("|")
+						.append(cartItem.getTitle()).append("|").append("").append("|")
 						.append(cartItem.getPrice()).append("#");
 			}
 
 			String cartItemsString = sb.toString();
+			System.out.println("CART ITEMS STRING: " + cartItemsString);
 
 			// remove trailing #
 			if (cartItemsString.endsWith("#")) {

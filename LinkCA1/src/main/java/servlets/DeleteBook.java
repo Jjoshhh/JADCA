@@ -34,6 +34,7 @@ public class DeleteBook extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String isbn = request.getParameter("isbn");
+		System.out.println(isbn);
 		try {
 			Connection conn = DBUtility.getConnection();
 			String sql = "DELETE FROM booklist WHERE ISBN=?";
@@ -49,7 +50,7 @@ public class DeleteBook extends HttpServlet {
 			if (rowsDeleted > 0) {
 				// Deletion successful
 				System.out.println("Deletion successful!");
-				response.sendRedirect("bookInv.jsp");
+				response.sendRedirect("bookInv.jsp?deleteStatus=true");
 			} else {
 				// No book found with the given ISBN
 				System.out.println("Error. Please Try Again!");

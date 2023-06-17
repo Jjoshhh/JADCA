@@ -65,18 +65,21 @@ public class Login extends HttpServlet {
 				String userRole = resultSet.getString("role_name");
 				String cus_id = resultSet.getString("customer_id");
 				
-				System.out.println(cus_id);
+				System.out.println("This is cus_id: " +cus_id);
 				String cart = cus_id + RandGeneratedStr(10);
-				System.out.println(cart);
+				System.out.println("This is cart : " + cart);
 
 				HttpSession session = request.getSession();
 				session.setAttribute("userRole", userRole);
 				session.setAttribute("cus_id", cus_id);
+				
+				
 				// setting session to expiry in 30 mins
 				session.setMaxInactiveInterval(30 * 60);
-
-				Cookie cart_id = new Cookie("cart_id", cus_id);
-
+				
+				
+				// Cart_id cookies
+				Cookie cart_id = new Cookie("cart_id", cart);
 				cart_id.setMaxAge(30 * 60);
 				response.addCookie(cart_id);
 				response.sendRedirect("bookInv.jsp");

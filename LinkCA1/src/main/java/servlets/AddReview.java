@@ -66,8 +66,10 @@ public class AddReview extends HttpServlet {
 			
 			if(rowsInsert > 0) {
 				System.out.println("Success");
+				response.sendRedirect("Home.jsp?reviewAdded=true");
 			} else {
 				System.out.println("Failure");
+				response.sendRedirect("Home.jsp?reviewAdded=false");
 			}
 			
 			conn.close();
