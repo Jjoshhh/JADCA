@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="classes.Book"%>
-<%@page import="java.util.*"%>
+<%@page import="java.util.*, classes.*"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +24,8 @@
 	<jsp:include page="adminNavBar.jsp"></jsp:include>
 
 	<!--Page-->
-	<form action="<%=request.getContextPath()%>/BookSearch" method="post">
+	<form action="<%=request.getContextPath()%>/CustomerSearch"
+		method="post">
 		<div
 			class="container mx-auto rounded-lg min-h-screen bg-transparent flex justify-center items-center flex-col">
 			<div class="flex w-3/4">
@@ -32,8 +33,9 @@
 				<div class="relative w-1/5">
 					<select name="option"
 						class="rounded-l-lg bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-						<option selected value="title">Title</option>
-						<option value="isbn">ISBN Number</option>
+						<option selected value="firstName">First Name</option>
+						<option value="lastName">Last Name</option>
+						<option value="customer_id">Customer ID</option>
 					</select>
 				</div>
 
@@ -44,21 +46,18 @@
 
 					<button type="submit"
 						class="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-						<svg aria-hidden="true" class="w-5 h-5" fill="none"
-							stroke="currentColor" viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg">
+						<a href="#cards"> <svg aria-hidden="true" class="w-5 h-5"
+								fill="none" stroke="currentColor" viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round"
-								stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-              </svg>
-						<span class="sr-only">Search</span>
+									stroke-width="2"
+									d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg> <span class="sr-only">Search</span>
 					</button>
+					</a>
 				</div>
 			</div>
 
-			<div>
-				<a href="<%=request.getContextPath()%>/AddBook"
-					class="text-blue-400 text-xl p-1">Add Book</a>
-			</div>
 
 			<!--Scroll down button-->
 			<div class="flex justify-center items-center">
@@ -70,26 +69,24 @@
 	</form>
 
 	<%
-	if (request.getAttribute("bookList") != null) {
+	if (request.getAttribute("cusList") != null) {
 	%>
 	<!-- Cards -->
 	<div class="container mx-auto min-h-screen text-center bg-transparent">
 		<div id="cards" class="grid grid-cols-5 gap-4">
 			<%
-			List<Book> bookList = (List<Book>) request.getAttribute("bookList");
-			if (bookList != null && !bookList.isEmpty()) {
-				for (Book book : bookList) {
+			List<User> cusList = (List<User>) request.getAttribute("cusList");
+			if (cusList != null && !cusList.isEmpty()) {
+				for (User u : cusList) {
 			%>
 			<div
 				class="flex flex-col  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-				<img class="rounded-t-lg"
-					src="DisplayImage?isbn=<%=book.getISBN()%>" alt="Book Image" />
 				<div class="p-5">
 					<h5
 						class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-						<%=book.getTitle()%></h5>
+						<%=u.getFullName()%></h5>
 					<!--Update Button-->
-					<a href="UpdateBook?isbn=<%=book.getISBN()%>"
+					<a href="AdminUserUpdate?id=<%=u.getCustomer_id()%>"
 						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 						Update <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1"
 							fill="currentColor" viewBox="0 0 20 20"
@@ -102,7 +99,7 @@
 
 					<!--Delete Button-->
 					<a data-modal-hide="popup-modal" type="button"
-						href="DeleteBook?isbn=<%=book.getISBN()%>"
+						href="DeleteUser?id=<%=u.getCustomer_id() %> "
 						class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
 						Delete</a>
 				</div>
