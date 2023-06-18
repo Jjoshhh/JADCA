@@ -24,7 +24,7 @@
 		User u = (User) request.getAttribute("customerD");
 		%>
 		<form
-			action="<%=request.getContextPath()%>/AdminUpdateUser?id=<%=u.getCustomer_id()%>"
+			action="<%=request.getContextPath()%>/GetUserDetails?id=<%=u.getCustomer_id()%>"
 			method="post">
 
 			<!--Header-->

@@ -41,11 +41,19 @@ public class BookClass {
 		this.customer_id = customerID;
 	}
 	
+	public BookClass (String imageURL, String title, double price, String isbn) {
+		this.imageURL = imageURL;
+		this.title = title;
+		this.price = price;
+		this.ISBN = isbn;
+	}
+	
 	public BookClass (String imageURL, String title, double price) {
 		this.imageURL = imageURL;
 		this.title = title;
 		this.price = price;
 	}
+
 
 	public int getCustomer_id() {
 		return customer_id;

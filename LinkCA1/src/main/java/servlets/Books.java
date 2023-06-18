@@ -84,7 +84,7 @@ public class Books extends HttpServlet {
 		connection = DBUtility.getConnection();
 
 		try {
-			String bookmarkQuery = "SELECT bl.ImageURL, bl.title, bl.price FROM booklist as bl INNER JOIN bookmark as bm ON bl.ISBN = bm.ISBN WHERE bm.customer_id = ?";
+			String bookmarkQuery = "SELECT bl.ISBN, bl.ImageURL, bl.title, bl.price FROM booklist as bl INNER JOIN bookmark as bm ON bl.ISBN = bm.ISBN WHERE bm.customer_id = ?";
 
 			// creating the prepared statement
 			preparedStatement = connection.prepareStatement(bookmarkQuery);
@@ -98,9 +98,9 @@ public class Books extends HttpServlet {
 				String imageURL = resultSet.getString("ImageURL");
 				String title = resultSet.getString("title");
 				double price = resultSet.getDouble("price");
-
+				String isbn = resultSet.getString("ISBN");
 				// BookClass instance
-				BookClass bookmark = new BookClass(imageURL, title, price);
+				BookClass bookmark = new BookClass(imageURL, title, price, isbn);
 
 				// Adding object to the arraylist
 				displayBookmark.add(bookmark);
@@ -140,8 +140,8 @@ public class Books extends HttpServlet {
 
 		try {
 			// creating sql query to be executed
-			String titleQuery = "SELECT bl.ISBN, bl.date, bl.genre, bl.description, bl.title, bl.author, bl.price, bl.quantity, bl.publisher, bl.publication, bl.imageURL, r.rating \r\n"
-					+ "FROM booklist as bl LEFT JOIN review as r ON bl.ISBN = r.ISBN WHERE title = ?";
+			String titleQuery = "SELECT bl.ISBN, bl.date, bl.genre, bl.description, bl.title, bl.author, bl.price, bl.quantity, bl.publisher, bl.publication, bl.imageURL, avg(r.rating) AS ratin\r\n"
+					+ " FROM booklist as bl LEFT JOIN review as r ON bl.ISBN = r.ISBN WHERE title = ?";
 
 			// creating the prepared statement
 			preparedStatement = connection.prepareStatement(titleQuery);
@@ -161,7 +161,7 @@ public class Books extends HttpServlet {
 				String author = resultSet.getString("author");
 				double price = resultSet.getDouble("price");
 				int quantity = resultSet.getInt("quantity");
-				int rating = resultSet.getInt("rating");
+				int rating = resultSet.getInt("ratin");
 				String publication = resultSet.getString("publication");
 
 				// books instance
@@ -174,6 +174,9 @@ public class Books extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println("-------------------");
+		System.out.println(displayBookList.size());
+		System.out.println("-------------------");
 		return displayBookList;
 	}
 
@@ -207,12 +210,8 @@ public class Books extends HttpServlet {
 				}
 			}
 
-			for (Review r : reviews) {
-				System.out.println("The customer name is " + r.getCusName());
-				System.out.println("The review is " + r.getReview());
-			}
-			System.out.println("i am about to leave the servlet to go to displaying the book!");
-
+			stmt.close();
+			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

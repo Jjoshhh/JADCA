@@ -86,7 +86,7 @@
 						class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 						<%=u.getFullName()%></h5>
 					<!--Update Button-->
-					<a href="AdminUserUpdate?id=<%=u.getCustomer_id()%>"
+					<a href="<%=request.getContextPath() %>/GetUserDetails?id=<%=u.getCustomer_id()%>"
 						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 						Update <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1"
 							fill="currentColor" viewBox="0 0 20 20"
@@ -98,8 +98,7 @@
 					</a>
 
 					<!--Delete Button-->
-					<a data-modal-hide="popup-modal" type="button"
-						href="DeleteUser?id=<%=u.getCustomer_id() %> "
+					<a href="DeleteUser?id=<%=u.getCustomer_id()%>"
 						class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
 						Delete</a>
 				</div>
@@ -109,8 +108,8 @@
 			} else {
 			%>
 			<div
-				class="container mx-auto min-h-screen text-center bg-transparent">
-				<p class="text-center text-white-400 text-bold">No books found.</p>
+				class="col-start-3 text-center bg-transparent">
+				<p class="text-center text-white text-bold text-5xl">No Customer Found!</p>
 			</div>
 			<%
 			}

@@ -19,48 +19,62 @@ import classes.DBUtility;
 @WebServlet("/DeleteUser")
 public class DeleteUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DeleteUser() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	public DeleteUser() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		try {
 			HttpSession session = request.getSession(false);
-			String cus_id = (String) session.getAttribute("cus_id");
+			String cus_id = null;
+
+			if (((String) session.getAttribute("cus_id")) != null) {
+				cus_id = (String) session.getAttribute("cus_id");
+			} else {
+				cus_id = request.getParameter("id");
+			}
+			System.out.println(cus_id + "I AM DELETING THIS");
 			
 			Connection conn = DBUtility.getConnection();
 			String sql = "DELETE from customer WHERE customer_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, cus_id);
-			
+
 			int rowsInserted = stmt.executeUpdate();
-			
-			if(rowsInserted > 0) {
+
+			if (rowsInserted > 0) {
 				System.out.println("Success");
-				response.sendRedirect("---.jsp?userUpdate=true");
+				response.sendRedirect("customerInv.jsp?userDelete=true");
 			} else {
 				System.out.println("Failure");
-				response.sendRedirect("---.jsp?userUpdate=false");
+				response.sendRedirect("customerInv.jsp?userDelete=false");
 			}
-		} catch(Exception e) {
+			
+			stmt.close();
+			conn.close();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 	}
 
 }

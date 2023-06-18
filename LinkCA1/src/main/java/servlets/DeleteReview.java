@@ -18,51 +18,55 @@ import classes.DBUtility;
 @WebServlet("/DeleteReview")
 public class DeleteReview extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DeleteReview() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	public DeleteReview() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String reviewID = request.getParameter("reviewID");
-		
+
 		try {
 			Connection conn = DBUtility.getConnection();
-			String sql = "DELETE FROM review WHERE reivew_id=?";
-			
+			String sql = "DELETE FROM review WHERE review_id=?";
+
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setString(1, reviewID);
-			
+
 			int rowsInsert = statement.executeUpdate();
-			
-			if(rowsInsert > 0) {
+
+			if (rowsInsert > 0) {
 				System.out.println("Success");
 				response.sendRedirect("Home.jsp?reviewDeleted=true");
 			} else {
 				System.out.println("Failure");
 				response.sendRedirect("Home.jsp?reviewDeleted=false");
 			}
-			
+
 			conn.close();
 			statement.close();
-			
-		} catch(Exception e ) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+	}
 }

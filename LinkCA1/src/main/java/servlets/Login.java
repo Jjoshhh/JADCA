@@ -83,7 +83,7 @@ public class Login extends HttpServlet {
 			} else {
 				response.sendRedirect("login.jsp?errCode=invalidLogin");
 			}
-
+			pstmt.close();
 			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
