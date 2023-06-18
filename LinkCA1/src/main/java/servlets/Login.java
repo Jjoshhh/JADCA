@@ -64,10 +64,7 @@ public class Login extends HttpServlet {
 			if (resultSet.next()) {
 				String userRole = resultSet.getString("role_name");
 				String cus_id = resultSet.getString("customer_id");
-				
-				System.out.println("This is cus_id: " +cus_id);
 				String cart = cus_id + RandGeneratedStr(10);
-				System.out.println("This is cart : " + cart);
 
 				HttpSession session = request.getSession();
 				session.setAttribute("userRole", userRole);

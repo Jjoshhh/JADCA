@@ -194,23 +194,19 @@
 							</form>
 						</div>
 					</div>
-
-				</div>
-
-				<div class="flex flex-col ml-5 mt-40">
-					<div class="my-3">
-						Released
-						<%=book.getDate()%></div>
-					<div>
-						<%=book.getDescription()%>
-					</div>
+					
+									<!-- Reviews Section -->
+				<jsp:include page="reviews.jsp">
+					<jsp:param name="isbn" value="<%=book.getISBN()%>" />
+				</jsp:include>
+					
 				</div>
 			</div>
 
-			<!-- Reviews Section -->
+			<%-- 			<!-- Reviews Section -->
 			<jsp:include page="reviews.jsp">
 				<jsp:param name="isbn" value="<%=book.getISBN()%>" />
-			</jsp:include>
+			</jsp:include> --%>
 
 
 			<!-- Bookmark Page -->
@@ -267,10 +263,7 @@
 				}
 				
 				// constructing the URL
-				let URL = "<%=request.getContextPath()%>/BasketServlet?ISBN="
-										+ "<%=book.getISBN()%>"
-										+ "&Cart_id=null&quantity="
-										+ quantityValue;
+				let URL = "<%=request.getContextPath()%>/BasketServlet?ISBN=" + "<%=book.getISBN()%>" + "&Cart_id=null&quantity=" + quantityValue;
 								// set value as form parameter
 								document.getElementById("addToBasket").action = URL;
 

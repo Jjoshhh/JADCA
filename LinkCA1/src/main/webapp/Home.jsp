@@ -129,7 +129,6 @@
 
 					<%
 					if (((String) session.getAttribute("cus_id")) != null) {
-
 						if (book.getCustomer_id() == 0) {
 					%>
 

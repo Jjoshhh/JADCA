@@ -9,7 +9,7 @@
 	crossorigin="anonymous"></script>
 <style>
 .rating {
-	direction: rtl;
+	direction: ltr;
 	unicode-bidi: bidi-override;
 }
 
@@ -46,8 +46,8 @@
 	<%
 	if (session.getAttribute("cus_id") != null) {
 	%>
-	<div class="container mx-auto">
-		<form
+	<div class="my-10">
+		<form class="flex flex-col justify-start mx-10"
 			action="<%=request.getContextPath()%>/AddReview?isbn=<%=request.getParameter("isbn")%>"
 			method="post">
 			<div class="rating ">
@@ -61,7 +61,12 @@
 			</div>
 			<label for="description">Description:</label>
 			<textarea name="description" id="description" rows="4" cols="50"></textarea>
-			<input type="submit" value="Submit Review">
+			<!-- <input type="submit" value="Submit Review"> -->
+			<div class="flex justify-end">
+				<button type="submit"
+					class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-2">Submit
+					Review</button>
+			</div>
 		</form>
 	</div>
 
@@ -91,9 +96,9 @@
 
 					<!-- Stars -->
 					<jsp:include page="starRating.jsp">
-						<jsp:param name="rating" value="<%=R.getRating() %>"/>
+						<jsp:param name="rating" value="<%=R.getRating()%>" />
 					</jsp:include>
-					
+
 					<blockquote>
 						<p class="text-2xl font-semibold text-gray-900 dark:text-white">
 							"<%=R.getReview()%>"
@@ -111,7 +116,7 @@
 				</figure>
 			</div>
 			<div>
-				<a href="DeleteReview?reviewID=<%= R.getReviewID() %>"></a>
+				<a href="DeleteReview?reviewID=<%=R.getReviewID()%>"></a>
 			</div>
 		</div>
 		<%

@@ -23,8 +23,9 @@
 		<%
 		Book BookU = (Book) request.getAttribute("updatingBook");
 		%>
-		<form action="<%=request.getContextPath()%>/UpdateBook?isbn=<%=BookU.getISBN() %>" method="post"
-			enctype="multipart/form-data">
+		<form
+			action="<%=request.getContextPath()%>/UpdateBook?isbn=<%=BookU.getISBN()%>"
+			method="post" enctype="multipart/form-data">
 
 			<!--Header-->
 			<div class="grid grid-cols-2">
@@ -93,8 +94,7 @@
 								id="rating" name="rating" class="rounded text-2xl"
 								onchange="checkRating()">
 								<option value="-1">Select Rating</option>
-								<option value="2">Test</option>
-								<%-- <option value="G"
+								<option value="G"
 									<%if (BookU.getRating().equals("G")) {
 	out.print("selected");
 }%>>G</option>
@@ -113,7 +113,7 @@
 								<option value="R-21"
 									<%if (BookU.getRating().equals("R-21")) {
 	out.print("selected");
-}%>>R-21</option> --%>
+}%>>R-21</option>
 							</select>
 						</div>
 

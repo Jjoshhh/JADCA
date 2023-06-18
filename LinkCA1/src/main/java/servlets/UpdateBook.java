@@ -129,7 +129,8 @@ public class UpdateBook extends HttpServlet {
 		String testStream = null;
 		InputStream imageStream = null;
 		
-		if (imagePart != null) {
+		System.out.println(imagePart + "IMAGE HERE");
+		if (imagePart.getSize() > 0) {
 			testStream = getStringFromPart(imagePart);
 			imageStream = imagePart.getInputStream();
 		}
@@ -212,6 +213,7 @@ public class UpdateBook extends HttpServlet {
 				sql += "imageURL = ?, ";
 				parameters.add(imageStream);
 				updatesMade = true;
+				System.out.println("I am updating my image");
 			}
 
 			if (updatesMade) {
@@ -250,7 +252,7 @@ public class UpdateBook extends HttpServlet {
 				statement.close();
 				conn.close();
 			} else {
-
+				response.sendRedirect("bookInv.jsp?changes=true");
 			}
 
 		} /*

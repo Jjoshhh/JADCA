@@ -38,6 +38,13 @@
 					BookStore</h4>
 			</a>
 			<div class="flex flex-nowrap justify-evenly gap-16">
+				<%if(session.getAttribute("userRole") != null && session.getAttribute("userRole").equals("customer")){ %>
+				<a href="<%=request.getContextPath() %>/UpdateUser" 
+					class="font-medium px-3 py-2 rounded-lg hover:bg-neutral-700 w-[100px] text-center">
+					<i class="fa-solid fa-gear"></i>
+					<h4 class="text-white">Settings</h4>
+				</a> 
+				<%} %>
 				<a href="./Home.jsp"
 					class="font-medium px-3 py-2 rounded-lg hover:bg-neutral-700 w-[100px] text-center">
 					<i class="fa-solid fa-magnifying-glass text-white"></i>
@@ -94,7 +101,7 @@
 								<!-- <div class="w-[50px] aspect-[3/4] bg-gray-700 rounded-md"></div> -->
 								<img
 									class="min-w-[50px] w-[50px] aspect-[3/4] bg-gray-700 rounded-md"
-									src="DisplayImage?isbn=<%=cartItem.getISBN() %>" alt="" />
+									src="DisplayImage?isbn=<%=cartItem.getISBN()%>" alt="" />
 								<div class="flex flex-col w-[175px]">
 									<div class="truncate"><%=cartItem.getTitle()%></div>
 									<div><%=cartItem.getPrice()%></div>
@@ -147,9 +154,9 @@
 						break;
 					}
 				}
-				
+
 				boolean cusExist = loggedIn;
-				
+
 				if (loggedIn) {
 				%>
 
@@ -173,8 +180,7 @@
 				%>
 
 				<div class="flex font-medium px-3 py-2">
-					<a class="flex font-medium text-sm px-3 py-2"
-						href="login.jsp">
+					<a class="flex font-medium text-sm px-3 py-2" href="login.jsp">
 						<button class="Btn">
 							<div class="pr-16">Login</div>
 							<svg class="svg text-4xl" xmlns="http://www.w3.org/2000/svg"
