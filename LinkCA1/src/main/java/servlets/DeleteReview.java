@@ -9,21 +9,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import classes.DBUtility;
 
 /**
- * Servlet implementation class AddReview
+ * Servlet implementation class DeleteReview
  */
-@WebServlet("/AddReview")
-public class AddReview extends HttpServlet {
+@WebServlet("/DeleteReview")
+public class DeleteReview extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddReview() {
+    public DeleteReview() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,31 +38,23 @@ public class AddReview extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String isbn = request.getParameter("isbn");
-		String review = request.getParameter("description");
-		int rating = Integer.parseInt(request.getParameter("rating"));
-		
-		HttpSession session = request.getSession(false);
-		String cus_id = (String) session.getAttribute("cus_id");
+		String reviewID = request.getParameter("reviewID");
 		
 		try {
 			Connection conn = DBUtility.getConnection();
-			String sql = "INSERT INTO review (customer_id, ISBN, review, rating) VALUES (?,?,?,?)";
+			String sql = "DELETE FROM review WHERE reivew_id=?";
 			
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, cus_id);
-			statement.setString(2, isbn);
-			statement.setString(3, review);
-			statement.setInt(4, rating);
+			statement.setString(1, reviewID);
 			
 			int rowsInsert = statement.executeUpdate();
 			
 			if(rowsInsert > 0) {
 				System.out.println("Success");
-				response.sendRedirect("Home.jsp?reviewAdded=true");
+				response.sendRedirect("Home.jsp?reviewDeleted=true");
 			} else {
 				System.out.println("Failure");
-				response.sendRedirect("Home.jsp?reviewAdded=false");
+				response.sendRedirect("Home.jsp?reviewDeleted=false");
 			}
 			
 			conn.close();
@@ -72,7 +63,6 @@ public class AddReview extends HttpServlet {
 		} catch(Exception e ) {
 			e.printStackTrace();
 		}
-		
 	}
 
 }

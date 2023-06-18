@@ -33,12 +33,11 @@ public class BookClass {
 		this.customer_id = customer_id;
 	}
 	
-	public BookClass (String imageURL, String title, double price, String ISBN, int customer_id) {
+	public BookClass (String imageURL, String title, double price, String ISBN) {
 		this.imageURL = imageURL;
 		this.title = title;
 		this.price = price;
 		this.ISBN = ISBN;
-		this.customer_id = customer_id;
 	}
 	
 	public BookClass (String imageURL, String title, double price) {

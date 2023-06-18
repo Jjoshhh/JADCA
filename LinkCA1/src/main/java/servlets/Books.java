@@ -55,14 +55,13 @@ public class Books extends HttpServlet {
 		ArrayList<BookClass> displayBookList = getBookValues(connection, getTitle);
 		// Getting bookmarks from the method
 		ArrayList<BookClass> displayBookmark = getBookmark(connection, customer_id);
-		
 		ArrayList<Review> reviews = getReviews(isbn);
 
 		// Setting session from request
 		HttpSession session = request.getSession();
 		session.setAttribute("bookDetails", displayBookList);
 		session.setAttribute("Bookmark", displayBookmark);
-		
+
 		session.setAttribute("Reviews", reviews);
 
 		// redirect to book display page
@@ -182,28 +181,37 @@ public class Books extends HttpServlet {
 		ArrayList<Review> reviews = new ArrayList<Review>();
 		try {
 			Connection conn = DBUtility.getConnection();
-			String sql = "SELECT r.*, c.*,avg(rating) AS finalRating FROM review r INNER JOIN customer c ON r.customer_id = c.customer_id WHERE ISBN=?";
+			String sql = "SELECT r.*, c.* FROM review r INNER JOIN customer c ON r.customer_id = c.customer_id WHERE ISBN=?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, isbn);
 			ResultSet result = stmt.executeQuery();
 
 			while (result.next()) {
+				// To collate average rating
+				int rating = result.getInt("rating");
+				String review_id = result.getString("review_id");
 				String cus_id = result.getString("customer_id");
-				int rating = result.getInt("finalRating");
 				String reviewText = result.getString("review");
 				String fName = result.getString("first_name");
 				String lName = result.getString("last_name");
 				String cusName = fName + " " + lName;
-				Review review = new Review(cus_id, reviewText, rating, cusName);
-				reviews.add(review);
+
+				System.out.println("--------------------------------------------");
+				System.out.println("I just queried from MYSQL where rating is " + rating);
+				System.out.println("--------------------------------------------");
+
+				// Addding to arraylist
+				if (cus_id != null && cusName != null && reviewText != null) {
+					Review review = new Review(reviewText, rating, review_id, cusName);
+					reviews.add(review);
+				}
 			}
 
-			System.out.println(reviews);
-			for(Review r: reviews) {
-				System.out.println(r.getCusName());
-				System.out.println(r.getReview());
+			for (Review r : reviews) {
+				System.out.println("The customer name is " + r.getCusName());
+				System.out.println("The review is " + r.getReview());
 			}
-			System.out.println("i am about to leave the servlet");
+			System.out.println("i am about to leave the servlet to go to displaying the book!");
 
 		} catch (Exception e) {
 			e.printStackTrace();

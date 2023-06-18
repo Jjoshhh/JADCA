@@ -82,7 +82,7 @@ public class Login extends HttpServlet {
 				Cookie cart_id = new Cookie("cart_id", cart);
 				cart_id.setMaxAge(30 * 60);
 				response.addCookie(cart_id);
-				response.sendRedirect("bookInv.jsp");
+				response.sendRedirect("Home.jsp");
 			} else {
 				response.sendRedirect("login.jsp?errCode=invalidLogin");
 			}

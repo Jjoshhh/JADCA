@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1" import="java.util.*,classes.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,25 +43,28 @@
 </style>
 </head>
 <body>
-	<form action="<%=request.getContextPath() %>/AddReview" method="post">
-		<div class="rating">
-			<input type="radio" name="rating" id="star5" value="5" /><label
-				for="star5"></label> <input type="radio" name="rating" id="star4"
-				value="4" /><label for="star4"></label> <input type="radio"
-				name="rating" id="star3" value="3" /><label for="star3"></label> <input
-				type="radio" name="rating" id="star2" value="2" /><label
-				for="star2"></label> <input type="radio" name="rating" id="star1"
-				value="1" /><label for="star1"></label>
-		</div>
-		<br> <label for="description">Description:</label>
-		<textarea name="description" id="description" rows="4" cols="50"></textarea>
-		<br> <input type="submit" value="Submit Review">
-	</form>
-	
-	<!-- View all reviews -->
-	<div>
-		<% %>
+	<%
+	if (session.getAttribute("cus_id") != null) {
+	%>
+	<div class="container mx-auto">
+		<form
+			action="<%=request.getContextPath()%>/AddReview?isbn=<%=request.getParameter("isbn")%>"
+			method="post">
+			<div class="rating ">
+				<input type="radio" name="rating" id="star5" value="5" /><label
+					for="star5"></label> <input type="radio" name="rating" id="star4"
+					value="4" /><label for="star4"></label> <input type="radio"
+					name="rating" id="star3" value="3" /><label for="star3"></label> <input
+					type="radio" name="rating" id="star2" value="2" /><label
+					for="star2"></label> <input type="radio" name="rating" id="star1"
+					value="1" /><label for="star1"></label>
+			</div>
+			<label for="description">Description:</label>
+			<textarea name="description" id="description" rows="4" cols="50"></textarea>
+			<input type="submit" value="Submit Review">
+		</form>
 	</div>
+
 	<script>
 		$(document).ready(function() {
 			// Set the rating value when a star is clicked
@@ -70,5 +73,57 @@
 			});
 		});
 	</script>
+	<%
+	}
+	%>
+
+
+	<!-- View all reviews -->
+	<div>
+		<%
+		ArrayList<Review> reviews = (ArrayList<Review>) session.getAttribute("Reviews");
+		if (reviews != null && reviews.size() > 0) {
+			for (Review R : reviews) {
+		%>
+		<div>
+			<div>
+				<figure class="max-w-screen-md">
+
+					<!-- Stars -->
+					<jsp:include page="starRating.jsp">
+						<jsp:param name="rating" value="<%=R.getRating() %>"/>
+					</jsp:include>
+					
+					<blockquote>
+						<p class="text-2xl font-semibold text-gray-900 dark:text-white">
+							"<%=R.getReview()%>"
+						</p>
+					</blockquote>
+					<figcaption class="flex items-center mt-6 space-x-3">
+						<img class="w-6 h-6 rounded-full"
+							src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+							alt="profile picture">
+						<div
+							class="flex items-center divide-x-2 divide-gray-300 dark:divide-gray-700">
+							<cite class="pr-3 font-medium text-gray-900 dark:text-white"><%=R.getCusName()%></cite>
+						</div>
+					</figcaption>
+				</figure>
+			</div>
+			<div>
+				<a href="DeleteReview?reviewID=<%= R.getReviewID() %>"></a>
+			</div>
+		</div>
+		<%
+		}
+		} else {
+		%>
+		<div>
+			<p>No Results.</p>
+		</div>
+		<%
+		}
+		%>
+	</div>
 </body>
 </html>

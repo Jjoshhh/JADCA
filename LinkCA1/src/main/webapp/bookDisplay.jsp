@@ -22,8 +22,10 @@
 	<div class="relative w-full h-screen" id="front">
 		<%@include file="navBar.jsp"%>
 
-		<!-- side bar to filter options -->
+
 		<div class="flex min-h-screen mt-[100px]" id="body">
+
+			<!-- side bar to filter options -->
 			<div class="bg-[#33363F] text-white w-1/5">
 				<ul class="flex flex-col w-full py-4 px-5 sticky top-[100px] z-40">
 					<li>
@@ -92,7 +94,8 @@
 					<div class="flex">
 						<div class="flex flex-col">
 							<img class="bg-white w-64 aspect-[3/4] ml-5 rounded-lg"
-								src="DisplayImage?isbn=<%=book.getISBN() %>" alt="./img/placeholder_img.webp" />
+								src="DisplayImage?isbn=<%=book.getISBN()%>"
+								alt="./img/placeholder_img.webp" />
 							<div class="ml-5 mt-2">
 								ISBN Identification Number:
 								<p><%=book.getISBN()%></p>
@@ -187,18 +190,7 @@
 												d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path></svg>
 										Add to cart
 									</button>
-							</form>
-							<form>
-								<button type="submit"
-									class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-									Review
-									<svg aria-hidden="true" class="w-5 h-5 ml-2 -mr-1"
-										fill="currentColor" viewBox="0 0 20 20"
-										xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd"
-											d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-											clip-rule="evenodd"></path></svg>
-								</button>
+								</div>
 							</form>
 						</div>
 					</div>
@@ -214,6 +206,14 @@
 					</div>
 				</div>
 			</div>
+
+			<!-- Reviews Section -->
+			<jsp:include page="reviews.jsp">
+				<jsp:param name="isbn" value="<%=book.getISBN()%>" />
+			</jsp:include>
+
+
+			<!-- Bookmark Page -->
 			<div class="flex flex-col items-center border-l w-[30%] my-7 p-4">
 				<p class="pb-2">Bookmark</p>
 				<hr class="border w-full mx-2" />
@@ -225,19 +225,6 @@
 				if (displayBookmark != null && !displayBookmark.isEmpty()) {
 					for (BookClass bookmark : displayBookmark) {
 				%>
-
-				<%-- 				<form action="<%=request.getContextPath()%>/Books?title=<%=bookmark.getTitle() %>" class="flex bg-white w-5/6 aspect-[2/1] mt-5 rounded-lg" method="post">
-					<button type="submit">
-						<img class="bg-[#33363F] w-24 aspect-[1/1.5] m-3 rounded-lg" src="" alt="">
-						<div class="my-3 mx-3">
-							<div class="text-black truncate">
-								<p><%= bookmark.getTitle() %></p>
-								<p class="font-semibold">$ <%=bookmark.getPrice() %></p>
-							</div>
-						</div>
-					</button>
-				</form> --%>
-
 				<form
 					action="<%=request.getContextPath()%>/Books?title=<%=bookmark.getTitle()%>"
 					class="text-black bg-white w-full aspect-[2/1] mt-5 rounded-lg p-3"
@@ -245,7 +232,8 @@
 					<button class="w-full flex items-center justify-between gap-3"
 						type="submit">
 						<img class="bg-[#33363F] w-24 aspect-[1/1.5] rounded-lg"
-							style="min-width: 6rem" src="" alt="">
+							style="min-width: 6rem"
+							src="DisplayImage?isbn=<%=bookmark.getISBN()%>" alt="">
 						<div class="flex flex-col items-center justify-center w-full">
 							<p><%=bookmark.getTitle()%></p>
 							<p class="font-semibold">

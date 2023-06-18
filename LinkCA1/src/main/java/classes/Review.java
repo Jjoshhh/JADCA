@@ -1,25 +1,19 @@
 package classes;
 
 public class Review {
-	private String customerID;
 	private String review;
 	private int rating;
 	private String cusName;
+	private String reviewID;
+	
+	
 
-	public Review(String customerID, String review, int rating, String cusName) {
+	public Review(String review, int rating, String reviewID, String cusName) {
 		super();
-		this.customerID = customerID;
 		this.review = review;
 		this.rating = rating;
 		this.cusName = cusName;
-	}
-
-	public String getCustomerID() {
-		return customerID;
-	}
-
-	public void setCustomerID(String customerID) {
-		this.customerID = customerID;
+		this.reviewID = reviewID;
 	}
 
 	public String getReview() {
@@ -44,6 +38,14 @@ public class Review {
 
 	public void setCusName(String cusName) {
 		this.cusName = cusName;
+	}
+
+	public String getReviewID() {
+		return reviewID;
+	}
+
+	public void setReviewID(String reviewID) {
+		this.reviewID = reviewID;
 	}
 
 }

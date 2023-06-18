@@ -26,16 +26,16 @@
 			window.location.href = "./filterConnection.jsp";
 		}
 		</script>
-	
+
 		<!-- Navigation Bar -->
 		<%@include file="navBar.jsp"%>
-		
+
 		<!-- Alert for Invalid Login -->
 		<div id="loginAlert" class="hidden">
 			<%@ include file="alert.jsp"%>
 		</div>
-		
-		
+
+
 		<!-- search bar -->
 		<form action="HomePageConnection.jsp" method="get">
 			<div
@@ -62,16 +62,17 @@
 	<!-- side bar to filter options -->
 	<div class="flex min-h-screen" id="body">
 		<div class="bg-[#33363F] text-white w-1/5">
-			<ul class="flex flex-col w-full py-4 px-5 sticky top-[100px] z-40 gap-4">
+			<ul
+				class="flex flex-col w-full py-4 px-5 sticky top-[100px] z-40 gap-4">
 				<li>
 					<p class="font-bold text-2xl">Pricing</p>
 				</li>
 				<!-- add slider eventually -->
 				<div class="range-slider">
-  					<input class="range-slider__range" type="range" value="50" min="0" max="50" step="0.5">
-  					<span class="range-slider__value">0</span>
+					<input class="range-slider__range" type="range" value="50" min="0"
+						max="50" step="0.5"> <span class="range-slider__value">0</span>
 				</div>
-				
+
 				<li>
 					<p class="font-bold text-2xl">Category</p>
 				</li>
@@ -127,10 +128,14 @@
 				<div class="w-full relative">
 
 					<%
-					if (book.getCustomer_id() == 0) {
+					if (((String) session.getAttribute("cus_id")) != null) {
+
+						if (book.getCustomer_id() == 0) {
 					%>
 
-					<form action="<%=request.getContextPath()%>/Bookmark?status=unchecked&ISBN=<%=book.getISBN() %>" method="post">
+					<form
+						action="<%=request.getContextPath()%>/Bookmark?status=unchecked&ISBN=<%=book.getISBN()%>"
+						method="post">
 						<button type="submit">
 							<i
 								class="z-20 fa-regular fa-bookmark text-2xl absolute top-[45px] right-[20px] p-2"></i>
@@ -139,13 +144,16 @@
 					<%
 					} else {
 					%>
-					<form action="<%=request.getContextPath()%>/Bookmark?status=checked&ISBN=<%=book.getISBN() %>" method="post">
+					<form
+						action="<%=request.getContextPath()%>/Bookmark?status=checked&ISBN=<%=book.getISBN()%>"
+						method="post">
 						<button type="submit">
 							<i
 								class="z-20 fa-solid fa-bookmark text-2xl absolute top-[45px] right-[20px] p-2"></i>
 						</button>
 					</form>
 					<%
+					}
 					}
 					%>
 
@@ -157,7 +165,8 @@
 								class="w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow bg-[#3D4D64] dark:border-gray-700"
 								id="bookContainer">
 								<div class="p-4 relative">
-									<img class="rounded-lg" src="DisplayImage?isbn=<%=book.getISBN()%>"
+									<img class="rounded-lg"
+										src="DisplayImage?isbn=<%=book.getISBN()%>"
 										alt="<%=defaultImagePath%>" />
 								</div>
 								<div class="px-5 pb-5">
@@ -166,48 +175,43 @@
 										class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white h-[30px] overflow-hidden">
 										<p class="truncate text-left"><%=book.getTitle()%></p>
 									</h5>
-									<div class="flex items-center mt-1 mb-2.5">
-										<svg aria-hidden="true" class="w-5 h-5 text-yellow-300"
-											fill="currentColor" viewBox="0 0 20 20" s
-											xmlns="http://www.w3.org/2000/svg">
-	                                <title>First star</title>
-	                                <path
-												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-	                                </path>
-	                            </svg>
-										<svg aria-hidden="true" class="w-5 h-5 text-yellow-300"
+
+									<!-- Star Rating -->
+									<div class="flex items-center mb-5">
+
+										<%
+										int rating = 3;
+										int coloured = rating;
+										int nonColoured = 5 - rating;
+
+										for (int i = 0; i < coloured; i++) {
+										%>
+										<!-- Coloured Stars -->
+										<svg aria-hidden="true" class="w-5 h-5 text-yellow-400"
 											fill="currentColor" viewBox="0 0 20 20"
 											xmlns="http://www.w3.org/2000/svg">
-	                                <title>Second star</title>
-	                                <path
-												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-	                                </path>
-	                            </svg>
-										<svg aria-hidden="true" class="w-5 h-5 text-yellow-300"
+								<title>Star</title><path
+												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+										<%
+										}
+										%>
+
+
+										<%
+										for (int i = 0; i < nonColoured; i++) {
+										%>
+										<!-- Non Coloured Stars -->
+										<svg aria-hidden="true"
+											class="w-5 h-5 text-gray-300 dark:text-gray-500"
 											fill="currentColor" viewBox="0 0 20 20"
 											xmlns="http://www.w3.org/2000/svg">
-	                                <title>Third star</title>
-	                                <path
-												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-	                                </path>
-	                            </svg>
-										<svg aria-hidden="true" class="w-5 h-5 text-yellow-300"
-											fill="currentColor" viewBox="0 0 20 20"
-											xmlns="http://www.w3.org/2000/svg">
-	                                <title>Fourth star</title>
-	                                <path
-												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-	                                </path>
-	                            </svg>
-										<svg aria-hidden="true" class="w-5 h-5 text-yellow-300"
-											fill="currentColor" viewBox="0 0 20 20"
-											xmlns="http://www.w3.org/2000/svg">
-	                                <title>Fifth star</title>
-	                                <path
-												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-	                                </path>
-	                            </svg>
+									<title>Star</title><path
+												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+										<%
+										}
+										%>
 									</div>
+
 									<div class="flex items-center justify-between">
 										<span class="text-lg font-bold text-gray-900 dark:text-white">$<%=book.getPrice()%></span>
 									</div>
@@ -220,8 +224,11 @@
 				}
 				} else {
 				%>
-					<h1 class="col-span-4 text-white text-4xl font-bold my-12">No Results!</h1>
-				<% } %>
+				<h1 class="col-span-4 text-white text-4xl font-bold my-12">No
+					Results!</h1>
+				<%
+				}
+				%>
 			</div>
 		</div>
 	</div>
