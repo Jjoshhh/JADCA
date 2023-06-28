@@ -54,7 +54,7 @@
 		try {
 			// constructing the sql queries using StringBuilder
 			// construct the base query
-			StringBuilder newQuery = new StringBuilder("SELECT bl.*, bm.customer_id FROM booklist as bl LEFT JOIN bookmark as bm ON bl.ISBN = bm.ISBN AND bm.customer_id = ? WHERE (bm.customer_id = ? OR bm.customer_id IS null) AND bl.quantity > 0;");
+			StringBuilder newQuery = new StringBuilder("SELECT bl.*, bm.customer_id FROM booklist as bl LEFT JOIN bookmark as bm ON bl.ISBN = bm.ISBN AND bm.customer_id = ? WHERE (bm.customer_id = ? OR bm.customer_id IS null) AND bl.quantity > 0");
 			
 			// Appending the price to the sql query
 			if (getPrice != null && getPrice != "") {

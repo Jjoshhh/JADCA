@@ -102,7 +102,7 @@
 						</div>
 
 
-						<div class="ml-5 flex flex-col w-full  pr-5">
+						<div class="ml-10 flex flex-col w-full  pr-5">
 							<div class="text-3xl font-bold tracking-wide"><%=book.getTitle()%></div>
 
 
